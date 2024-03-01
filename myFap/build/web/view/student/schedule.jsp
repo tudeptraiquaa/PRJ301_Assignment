@@ -57,8 +57,8 @@
             </p>
         </div>
         <form action="../student/schedule" id="form" onchange="document.getElementById('form').submit()">
-            Student : <input type="text" name="id" value="${requestScope.id}" <c:if test="${account.role ne 3}">readonly</c:if>>
-            <c:if test="${account.role eq 3}">
+            Student : <input type="text" name="id" value="${requestScope.id}" <c:if test="${account.role eq 1}">readonly</c:if>>
+            <c:if test="${account.role ne 1}">
                 <input type="submit" value="Search">
             </c:if>
             <div class="error">
@@ -125,14 +125,14 @@
                             View by date
                         </option>
                     </select>
-                </div>    
-
-                <div class="table">
-                    <table style="width: 100%">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">
-                                    <c:if test="${option eq 0}">
+                </div>  
+                
+                <c:if test="${option eq 0}">
+                    <div class="table">
+                        <table style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">
                                         <div class="year">
                                             YEAR <select name="year">
                                                 <c:forEach items="${requestScope.years}" var="y">
@@ -144,9 +144,7 @@
                                                 </c:forEach>
                                             </select>
                                         </div>    
-                                    </c:if>
 
-                                    <c:if test="${option eq 0}">
                                         <div class="week">
                                             WEEK <select name="week" id="week">
                                                 <c:set var="count" value="1"/>
@@ -165,78 +163,172 @@
                                                 </c:forEach>
                                             </select>
                                         </div>    
-                                    </c:if>
-                                    <c:if test="${option eq 1}">
-                                        <div class="week">
-                                            <input type="date" name="fromDate" value="${fromDate}">-<input type="date" name="toDate" value="${toDate}">
-                                        </div>
-                                    </c:if>
-                                </th>
-                                
-                                <c:forEach items="${dates}" var="d">
-                                    <th>
-                                        ${d.weekday}
                                     </th>
-                                </c:forEach>
-                            </tr>
 
-                            <tr>
-                                <c:forEach items="${dates}" var="d">
-                                    <th>
-                                        ${d.day}/${d.month}
-                                    </th>
-                                </c:forEach>
-                            </tr>
-
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${requestScope.slots}" var="s">
-                                <tr>
-                                    <td>
-                                        Slot ${s.id} (from <span>${s.startTime}</span> to <span>${s.endTime}</span>)
-                                    </td>
                                     <c:forEach items="${dates}" var="d">
-                                        <td>
-                                            <c:forEach items="${requestScope.schedules}" var="sche">
-                                                <c:if test="${sche.slotId eq s.id and sche.date.compare(d) eq 0}">
-                                                    <p> <a href="../group/activity?groupId=${sche.groupId}&subjectId=${sche.subjectId}&id=${requestScope.id}&date=${sche.date}&subjectId=${sche.subjectId}&termId=${termId}&year=${year}&slotId=${sche.slotId}">
-                                                            ${sche.groupId}-${sche.subjectId}
-                                                        </a> </p>
-                                                    <p>at ${sche.roomId}</p>
-                                                    <c:if test="${sche.status and sche.date eq requestScope.currentDay}">
-                                                        <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
-                                                            <p style="color: green"> (Attended) </p>
-                                                        </a>
-                                                    </c:if>    
-
-                                                    <c:if test="${sche.status and sche.date < requestScope.currentDay}">
-                                                        <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
-                                                            <p style="color: green"> (Attended) </p>
-                                                        </a>
-                                                    </c:if>
-
-                                                    <c:if test="${!sche.status and sche.date eq requestScope.currentDay}">
-                                                        <p style="color: red"> (Not yet) </p>
-                                                    </c:if>
-                                                    <c:if test="${!sche.status and sche.date > requestScope.currentDay}">
-                                                        <p style="color: red"> (Not yet) </p>
-                                                    </c:if>
-                                                    <c:if test="${!sche.status and sche.date < requestScope.currentDay}">
-                                                        <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
-                                                            <p style="color: red"> (Absent) </p>
-                                                        </a>
-                                                    </c:if> 
-                                                </c:if>
-                                            </c:forEach>
-                                        </td>
+                                        <th>
+                                            ${d.weekday}
+                                        </th>
                                     </c:forEach>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
 
-                    </table>
+                                <tr>
+                                    <c:forEach items="${dates}" var="d">
+                                        <th>
+                                            ${d.day}/${d.month}
+                                        </th>
+                                    </c:forEach>
+                                </tr>
 
-                </div>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${requestScope.slots}" var="s">
+                                    <tr>
+                                        <td>
+                                            Slot ${s.id} (from <span>${s.startTime}</span> to <span>${s.endTime}</span>)
+                                        </td>
+                                        <c:forEach items="${dates}" var="d">
+                                            <td>
+                                                <c:forEach items="${requestScope.schedules}" var="sche">
+                                                    <c:if test="${sche.slotId eq s.id and sche.date.compare(d) eq 0}">
+                                                        <p> <a href="../group/activity?groupId=${sche.groupId}&subjectId=${sche.subjectId}&id=${requestScope.id}&date=${sche.date}&subjectId=${sche.subjectId}&termId=${termId}&year=${year}&slotId=${sche.slotId}">
+                                                                ${sche.groupId}-${sche.subjectId}
+                                                            </a> </p>
+                                                        <p>at ${sche.roomId}</p>
+                                                        <c:if test="${sche.status and sche.date eq requestScope.currentDay}">
+                                                            <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                <p style="color: green"> (Attended) </p>
+                                                            </a>
+                                                        </c:if>    
+
+                                                        <c:if test="${sche.status and sche.date < requestScope.currentDay}">
+                                                            <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                <p style="color: green"> (Attended) </p>
+                                                            </a>
+                                                        </c:if>
+
+                                                        <c:if test="${!sche.status and sche.date eq requestScope.currentDay}">
+                                                            <p style="color: red"> (Not yet) </p>
+                                                        </c:if>
+                                                        <c:if test="${!sche.status and sche.date > requestScope.currentDay}">
+                                                            <p style="color: red"> (Not yet) </p>
+                                                        </c:if>
+                                                        <c:if test="${!sche.status and sche.date < requestScope.currentDay}">
+                                                            <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                <p style="color: red"> (Absent) </p>
+                                                            </a>
+                                                        </c:if> 
+                                                    </c:if>
+                                                </c:forEach>
+                                            </td>
+                                        </c:forEach>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
+
+                <c:if test="${option eq 1}">
+                    <div class="table">
+                        <div class="table_1">
+                            <table style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="week">
+                                                From: <input type="date" name="fromDate" value="${fromDate}">
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="week">
+                                                To: <input type="date" name="toDate" value="${toDate}">
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${requestScope.slots}" var="s">
+                                        <tr>
+                                            <td>
+                                                <div class="slot${s.id}">
+                                                    Slot ${s.id} (from <span>${s.startTime}</span> to <span>${s.endTime}</span>)
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table_2">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <c:forEach items="${dates}" var="d">
+                                            <th>
+                                                ${d.day}/${d.month}
+                                            </th>
+                                        </c:forEach>
+                                    </tr>
+                                    <tr>
+                                        <c:forEach items="${dates}" var="d">
+                                            <th>
+                                                ${d.weekday}
+                                            </th>
+                                        </c:forEach>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${requestScope.slots}" var="s">
+                                        <tr>
+                                            <c:forEach items="${dates}" var="d">
+                                                <td>
+                                                    <div class="slot${s.id}">
+                                                        <c:forEach items="${requestScope.schedules}" var="sche">
+                                                            <c:if test="${sche.slotId eq s.id and sche.date.compare(d) eq 0}">
+                                                                <p> <a href="../group/activity?groupId=${sche.groupId}&subjectId=${sche.subjectId}&id=${requestScope.id}&date=${sche.date}&subjectId=${sche.subjectId}&termId=${termId}&year=${year}&slotId=${sche.slotId}">
+                                                                        ${sche.groupId}-${sche.subjectId}
+                                                                    </a> </p>
+                                                                <p>at ${sche.roomId}</p>
+                                                                <c:if test="${sche.status and sche.date eq requestScope.currentDay}">
+                                                                    <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                        <p style="color: green"> (Attended) </p>
+                                                                    </a>
+                                                                </c:if>    
+
+                                                                <c:if test="${sche.status and sche.date < requestScope.currentDay}">
+                                                                    <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                        <p style="color: green"> (Attended) </p>
+                                                                    </a>
+                                                                </c:if>
+
+                                                                <c:if test="${!sche.status and sche.date eq requestScope.currentDay}">
+                                                                    <p style="color: red"> (Not yet) </p>
+                                                                </c:if>
+                                                                <c:if test="${!sche.status and sche.date > requestScope.currentDay}">
+                                                                    <p style="color: red"> (Not yet) </p>
+                                                                </c:if>
+                                                                <c:if test="${!sche.status and sche.date < requestScope.currentDay}">
+                                                                    <a href="../student/attendance?id=${requestScope.id}&termId=${requestScope.termId}&year=${requestScope.year}&subjectId=${sche.subjectId}">
+                                                                        <p style="color: red"> (Absent) </p>
+                                                                    </a>
+                                                                </c:if> 
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>
+                                                </td>
+                                            </c:forEach>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </c:if>
+
             </c:if>
         </form>
         <c:if test="${error eq null}">

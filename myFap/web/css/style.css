@@ -85,6 +85,7 @@ h3{
     background-color: #f5f5f5;
     border-radius: 5px;
     padding: 10px;
+    display: inline-block;
 }
 h4{
     margin: 0;
@@ -224,4 +225,35 @@ label{
     font-size: 12px;
     font-weight: 200;
     border-radius: 5px;
+}
+.table{
+    display: flex;
+}
+.table_1 table{
+    width: 100%;
+}
+.table_1{
+    height: 500px;
+    width: 20%;
+}
+.table_2{
+    height: 500px;
+    overflow-x: auto;
+    flex-grow: 1;
+}
+.table_2 td{
+    width: 100px;
+    height:50px;
+}
+.table_2 th{
+    height: 30px;
+    width: 100px;
+}
+.week{
+    display: flex;
+    justify-content: space-around;
+}
+.slot1, .slot2, .slot3, .slot4{
+   height: 75px;
+   width: 100px;
 }
