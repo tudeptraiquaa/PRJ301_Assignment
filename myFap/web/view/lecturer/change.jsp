@@ -10,69 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Change Lecturer</title>
-        <style>
-            .header{
-                display: flex;
-                justify-content: space-evenly;
-            }
-            a{
-                display: inline-block;
-                text-decoration: none;
-                color: #337ab7;
-            }
-            a:hover{
-                color: black;
-                text-decoration: black;
-            }
-            p{
-                margin: 0;
-            }
-            th{
-                background-color: #6b90da;
-            }
-            .setting{
-                display: flex;
-                justify-content: space-between;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                background-color: #F5F5F5;
-                padding: 10px;
-                border-radius: 10px;
-            }
-            .logout {
-                width: 100px;
-                display: flex;
-                justify-content: center;
-                background-color: #5CB85C;
-                border-radius: 5px;
-                margin:0px 5px 0px 5px;
-            }
-            .setting a {
-                align-content: center;
-                color: white;
-                font-weight: bold;
-            }
-            td{
-                border-bottom: 1px solid #F5F5F5;
-                border-right: 1px solid #F5F5F5;
-                width: 200px;
-                height:60px;
-                padding: 5px;
-            }
-            table{
-                width: 100%;
-            }
-            form{
-                border: 0px;
-                display: inline;
-            }
-            .button{
-                width: 70px;
-                height:30px;
-                color: white;
-                background-color: green;
-            }
-        </style>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <div class="header">
