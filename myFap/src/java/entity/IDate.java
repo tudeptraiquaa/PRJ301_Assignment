@@ -18,6 +18,11 @@ public class IDate extends IEntity {
     private String day, month, year, weekday;
 
     public IDate() {
+        IDate now = getDateNow();
+        this.day = now.day;
+        this.month = now.month;
+        this.year = now.year;
+        this.weekday = now.weekday;
     }
 
     public IDate(Date date) {
@@ -118,4 +123,5 @@ public class IDate extends IEntity {
     public String toString() {
         return year + "-" + month + "-" + day;
     }
+    
 }

@@ -12,7 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        Change Success!
+        ${change}
         <form action="../../home/login" method="post">
             <input type="hidden" name="user" value="${account.user}">
             <input type="hidden" name="password" value="${account.password}">

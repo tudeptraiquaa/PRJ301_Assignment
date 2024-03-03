@@ -65,6 +65,26 @@
                 ${error}
             </div>
             <c:if test="${requestScope.id ne null and error eq null}">
+                <div class="option">
+                    Option:
+                    <select name="option">
+                        <option value="0"
+                                <c:if test="${option eq 0}">
+                                    selected="selected"
+                                </c:if>
+                                >
+                            View by week
+                        </option>
+                        <option value="1" 
+                                <c:if test="${option eq 1}">
+                                    selected="selected"
+                                </c:if>
+                                >
+                            View by date
+                        </option>
+                    </select>
+                </div>
+                
                 <c:if test="${option eq 0}">
                     <div class="control">
                         <c:set var="countWeek" value="${requestScope.week}"/>
@@ -107,26 +127,6 @@
                     </div>
                 </c:if>
 
-                <div class="option">
-                    Option:
-                    <select name="option">
-                        <option value="0"
-                                <c:if test="${option eq 0}">
-                                    selected="selected"
-                                </c:if>
-                                >
-                            View by week
-                        </option>
-                        <option value="1" 
-                                <c:if test="${option eq 1}">
-                                    selected="selected"
-                                </c:if>
-                                >
-                            View by date
-                        </option>
-                    </select>
-                </div>  
-                
                 <c:if test="${option eq 0}">
                     <div class="table">
                         <table style="width: 100%">
@@ -358,5 +358,6 @@
                 </p>
             </div>
         </c:if>
+        <script src="../js/text.js"></script>
     </body>
 </html>

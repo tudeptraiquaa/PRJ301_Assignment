@@ -68,6 +68,10 @@
         <servlet-name>ActivityGroup</servlet-name>
         <servlet-class>controller.group.ActivityGroup</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewRequireChangeGroup</servlet-name>
+        <servlet-class>controller.group.ViewRequireChangeGroup</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home/login</url-pattern>
@@ -135,6 +139,10 @@
     <servlet-mapping>
         <servlet-name>ActivityGroup</servlet-name>
         <url-pattern>/group/activity</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRequireChangeGroup</servlet-name>
+        <url-pattern>/group/change/viewRequire</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>

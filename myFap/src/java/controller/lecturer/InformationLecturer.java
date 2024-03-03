@@ -26,18 +26,22 @@ public class InformationLecturer extends HttpServlet {
             throws ServletException, IOException {
         String lecturerId = request.getParameter("id");
         LecturerDBContext lecDB = new LecturerDBContext();
-        Lecturer lecturer = lecDB.getInformation(lecturerId);
+
         LocalDate currentDate = LocalDate.now();
         int year = currentDate.getYear();
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
         int week = currentDate.get(weekFields.weekOfWeekBasedYear());
         request.setAttribute("week", week);
         request.setAttribute("year", year);
-        if (lecturer == null) {
-            request.setAttribute("error", "Lecturer id does not exists!");
-        } else {
-            request.setAttribute("lecturer", lecturer);
+        if (lecturerId != null) {
+            Lecturer lecturer = lecDB.getInformation(lecturerId);
+            if (lecturer == null) {
+                request.setAttribute("error", "Lecturer id does not exists!");
+            } else {
+                request.setAttribute("lecturer", lecturer);
+            }
         }
+
         request.getRequestDispatcher("../view/lecturer/information.jsp").forward(request, response);
     }
 

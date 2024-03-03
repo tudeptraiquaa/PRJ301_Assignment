@@ -5,8 +5,11 @@
 package controller.group;
 
 import dal.GroupDBContext;
+import dal.StudentDBContext;
+import entity.IDate;
+import entity.RequireChangeGroup;
+import entity.Student;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +26,7 @@ public class ChangeGroup extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
-
+        StudentDBContext stuDB = new StudentDBContext();
         String id = request.getParameter("id");
         int month = Integer.parseInt(request.getParameter("month"));
         int year = Integer.parseInt(request.getParameter("year"));
@@ -45,10 +48,34 @@ public class ChangeGroup extends HttpServlet {
                 request.setAttribute("subjectsId", subjectsId);
             }
         }
-        
-        String subjectIdFrom = request.getParameter("subjectIdFrom");
-        if(subjectIdFrom != null){
-            request.setAttribute("subjectIdFrom", subjectIdFrom);
+
+        String subjectId = request.getParameter("subjectId");
+        if (subjectId != null) {
+            request.setAttribute("subjectId", subjectId);
+        }
+
+        String idTo = request.getParameter("idTo");
+        String groupIdTo;
+        if (idTo != null) {
+            if (idTo.equalsIgnoreCase(id)) {
+                request.setAttribute("errorTo", "Same id student!!!");
+            } else {
+                Student s = stuDB.getInformation(idTo);
+                if (s == null) {
+                    request.setAttribute("errorTo", "Student id does not exists!");
+                } else {
+                    request.setAttribute("idTo", idTo);
+                    groupIdTo = gDB.getGroupStudentFuture(idTo, month, year, subjectId);
+                    if (groupIdTo == null) {
+                        request.setAttribute("errorTo", "Student " + idTo + "'s subject " + subjectId + " does not exist");
+                    } else if (groupIdTo.equalsIgnoreCase(groupIdFrom)) {
+                        request.setAttribute("errorTo", "2 students are in the same class, subject " + subjectId);
+                    } else {
+                        request.setAttribute("groupIdTo", groupIdTo);
+                        request.setAttribute("method", "method='post'");
+                    }
+                }
+            }
         }
 
         request.setAttribute("id", id);
@@ -61,7 +88,27 @@ public class ChangeGroup extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        GroupDBContext gDB = new GroupDBContext();
+        IDate date = new IDate();
+        String idFrom = request.getParameter("id");
+        String groupIdFrom = request.getParameter("groupIdFrom");
+        String subjectId = request.getParameter("subjectId");
+        String idTo = request.getParameter("idTo");
+        String groupIdTo = request.getParameter("groupIdTo");
+        int month = Integer.parseInt(request.getParameter("month"));
+        int year = Integer.parseInt(request.getParameter("year"));
+        String termId = "";
+        if (month >= 1 && month <= 4) {
+            termId = "SP";
+        } else if (month >= 5 && month <= 8) {
+            termId = "SU";
+        } else {
+            termId = "FA";
+        }
+        gDB.addRequireChangeGroup(idFrom, groupIdFrom, idTo, groupIdTo, subjectId, termId, year, date.toString());
+        request.setAttribute("id", idFrom);
+        request.setAttribute("set", "The request was sent successfully");
+        request.getRequestDispatcher("../view/home/setSuccess.jsp").forward(request, response);
     }
 
     /**

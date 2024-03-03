@@ -28,7 +28,7 @@ public class InformationStudent extends HttpServlet {
             throws ServletException, IOException {
         String studentId = request.getParameter("id");
         StudentDBContext stuDB = new StudentDBContext();
-        Student s = stuDB.getInformation(studentId);
+
         LocalDate currentDate = LocalDate.now();
         int year = currentDate.getYear();
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -39,10 +39,13 @@ public class InformationStudent extends HttpServlet {
         request.setAttribute("now", now);
         request.setAttribute("week", week);
         request.setAttribute("year", year);
-        if (s == null) {
-            request.setAttribute("error", "Student id does not exists!");
-        } else {
-            request.setAttribute("student", s);
+        if (studentId != null) {
+            Student s = stuDB.getInformation(studentId);
+            if (s == null) {
+                request.setAttribute("error", "Student id does not exists!");
+            } else {
+                request.setAttribute("student", s);
+            }
         }
         request.getRequestDispatcher("../view/student/information.jsp").forward(request, response);
     }

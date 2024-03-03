@@ -53,7 +53,7 @@
                         <div>
                             <ul>
                                 <li>
-                                    <a href="../group/change?id=${account.user}&year=${now.year}&month=${now.month}">Yêu cầu đổi chéo lớp với sinh viên</a>
+                                    <a href="../group/change/viewRequire?id=${account.user}&year=${now.year}&month=${now.month}">Yêu cầu đổi chéo lớp với sinh viên</a>
                                 </li>
                             </ul>
                         </div>
@@ -187,12 +187,15 @@
                         <h3>Inormation Student(Thông tin sinh viên)</h3>
                         <ul>
                             <li>
-                                <a href="../student/information?adminId=${account.user}&role=${account.role}">Infomation</a>
+                                <a href="../student/information">Infomation</a>
                                 <span>(Thông tin)</span>
                             </li>
                             <li>
-                                <a href="../student/schedule?adminId=${account.user}&role=${account.role}&year=${requestScope.currentYear}&week=${week}">Weekly timetable</a>
+                                <a href="../student/schedule?year=${requestScope.currentYear}&week=${week}">Weekly timetable</a>
                                 <span>(Thời khóa biểu từng tuần)</span>
+                            </li>
+                            <li>
+                                <a href="../group/change">
                             </li>
                         </ul>
                     </div>

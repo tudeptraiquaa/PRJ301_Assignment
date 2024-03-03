@@ -109,6 +109,7 @@ public class EditAttendanceGroup extends HttpServlet {
         request.setAttribute("students", students);
         oldA = gDB.viewAttendanceGroup(groupId, subjectId, date, Integer.parseInt(slotId.trim()));
         request.setAttribute("attendances", oldA);
+        request.setAttribute("change", "Change successfully!");
         request.getRequestDispatcher("../../view/home/changeSuccess.jsp").forward(request, response);
 
     }

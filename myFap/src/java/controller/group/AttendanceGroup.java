@@ -83,6 +83,7 @@ public class AttendanceGroup extends HttpServlet {
         gDB.attendance(attendances);
         gDB.isTakenGroup(lecturerId, groupId, date, slotId, timeRecord);
 
+        request.setAttribute("set", "Attendance successfully");
         request.getRequestDispatcher("../view/home/setSuccess.jsp").forward(request, response);
         
     }

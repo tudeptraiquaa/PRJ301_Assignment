@@ -115,11 +115,13 @@ public class ScheduleLecturer extends HttpServlet {
             schedules = lecDB.getScheduleLecturer(lecturerId, fromDate, toDate);
         }
 
-        Lecturer lecturer = lecDB.getInformation(lecturerId);
-        if (lecturer == null) {
-            request.setAttribute("error", "Lecturer id does not exists!");
+        if (lecturerId != null) {
+            Lecturer lecturer = lecDB.getInformation(lecturerId);
+            if (lecturer == null) {
+                request.setAttribute("error", "Lecturer id does not exists!");
+            }
         }
-        
+
         request.setAttribute("option", option);
         request.setAttribute("schedules", schedules);
         request.setAttribute("currentYear", currentYear);
