@@ -13,9 +13,18 @@ public class Schedule extends IEntity{
     private String roomId;
     private String subjectId, subjectName;
     private int slotId;
+    private String weekday;
     private IDate date;
     private boolean status;
     private String lecturerId;
+
+    public String getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(String weekday) {
+        this.weekday = weekday;
+    }
 
     public String getLecturerId() {
         return lecturerId;

@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -32,7 +32,9 @@ public class CreateRequire extends HttpServlet {
         if (id != null) {
             ArrayList<String> groupsId = gDB.getGroupStudentInFuture(id, month, year);
             if (groupsId.size() == 0) {
-                request.setAttribute("error", "Khong co lop hoc nao ton tai!");
+                request.setAttribute("id", id);
+                request.setAttribute("error", "Chưa đến hạn nộp đơn, đăng ký(Undue for application and registration)!");
+                request.getRequestDispatcher("../view/group/createRequire.jsp").forward(request, response);
             } else {
                 request.setAttribute("groupsId", groupsId);
             }
@@ -81,7 +83,7 @@ public class CreateRequire extends HttpServlet {
         }
         request.setAttribute("year", year);
         request.setAttribute("month", month);
-        request.getRequestDispatcher("../view/group/change.jsp").forward(request, response);
+        request.getRequestDispatcher("../view/group/createRequire.jsp").forward(request, response);
     }
 
     @Override

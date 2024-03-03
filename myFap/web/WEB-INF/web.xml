@@ -72,6 +72,10 @@
         <servlet-name>ViewRequireChangeGroup</servlet-name>
         <servlet-class>controller.group.ViewRequireChangeGroup</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeGroupProcess</servlet-name>
+        <servlet-class>controller.group.ChangeGroupProcess</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home/login</url-pattern>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>ViewRequireChangeGroup</servlet-name>
         <url-pattern>/group/change/viewRequire</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeGroupProcess</servlet-name>
+        <url-pattern>/group/change/process</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>

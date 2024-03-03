@@ -7,6 +7,7 @@ package dal;
 import entity.Attendance;
 import entity.IEntity;
 import entity.RequireChangeGroup;
+import entity.Schedule;
 import entity.Term;
 import java.util.ArrayList;
 import java.sql.*;
@@ -260,9 +261,9 @@ public class GroupDBContext extends DBContext<IEntity> {
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, id);
-            stm.setInt(2, 2023);
-            stm.setInt(3, 12);
-            stm.setInt(4, 2023 + 1);
+            stm.setInt(2, year);
+            stm.setInt(3, month);
+            stm.setInt(4, year+1);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 String g = rs.getString("groupId");
@@ -276,8 +277,7 @@ public class GroupDBContext extends DBContext<IEntity> {
 
     public ArrayList<String> getSubjectStudentInFuture(String id, int month, int year, String groupId) {
         ArrayList<String> subjectsId = new ArrayList<>();
-        month = 12;
-        year = 2023;
+        
         String sql = """
                      select distinct p.subjectId
                      from Participate p
@@ -292,7 +292,7 @@ public class GroupDBContext extends DBContext<IEntity> {
             stm.setString(2, groupId);
             stm.setInt(3, year);
             stm.setInt(4, month);
-            stm.setInt(5, year+1);
+            stm.setInt(5, year + 1);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 String s = rs.getString("subjectId");
@@ -303,8 +303,8 @@ public class GroupDBContext extends DBContext<IEntity> {
         }
         return subjectsId;
     }
-    
-    public String getGroupStudentFuture(String id, int month, int year, String subjectId){
+
+    public String getGroupStudentFuture(String id, int month, int year, String subjectId) {
         month = 12;
         year = 2023;
         String sql = """
@@ -320,9 +320,9 @@ public class GroupDBContext extends DBContext<IEntity> {
             stm.setString(2, subjectId);
             stm.setInt(3, year);
             stm.setInt(4, month);
-            stm.setInt(5, year+1);
+            stm.setInt(5, year + 1);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getString("groupId");
             }
         } catch (SQLException ex) {
@@ -330,9 +330,32 @@ public class GroupDBContext extends DBContext<IEntity> {
         }
         return null;
     }
-    
+
     public void addRequireChangeGroup(String idFrom, String groupIdFrom, String idTo, String groupIdTo,
-            String subjectId, String termId, int year, String requsetDate){
+            String subjectId, String termId, int year, String requsetDate) {
+        RequireChangeGroup r = getRequireChangeGroup(idFrom, subjectId);
+        if (r != null) {
+            String sql = """
+                         update ChangeGroup set idTo = ?, groupIdTo = ?, requestDate = ?, termId = ?, [year] = ?
+                         where [status] = '-1' and idFrom = ? and subjectId = ? and groupIdFrom = ?
+                         """;
+            try {
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setString(1, idTo);
+                stm.setString(2, groupIdTo);
+                stm.setString(3, requsetDate);
+                stm.setString(4, termId);
+                stm.setInt(5, year);
+                stm.setString(6, idFrom);
+                stm.setString(7, subjectId);
+                stm.setString(8, groupIdFrom);
+                stm.executeUpdate();
+                return;
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         String sql = """
                      insert into ChangeGroup 
                      (idFrom, groupIdFrom, idTo, groupIdTo, subjectId, termId, [year], requestDate, [status])
@@ -353,19 +376,19 @@ public class GroupDBContext extends DBContext<IEntity> {
             Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public ArrayList<RequireChangeGroup> getRequiresChangeGroup(String id){
+
+    public ArrayList<RequireChangeGroup> getRequiresChangeGroup(String id) {
         ArrayList<RequireChangeGroup> request = new ArrayList<>();
         String sql = """
                      select subjectId, groupIdFrom, idTo, groupIdTo, requestDate, [status]
                      from ChangeGroup
-                     where idFrom = ?
+                     where idFrom = ? and status = '-1'
                      """;
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 RequireChangeGroup r = new RequireChangeGroup();
                 r.setSubjectId(rs.getString("subjectId"));
                 r.setGroupIdFrom(rs.getString("groupIdFrom"));
@@ -381,9 +404,347 @@ public class GroupDBContext extends DBContext<IEntity> {
         return request;
     }
 
+    public ArrayList<RequireChangeGroup> getRequiresChangeGroupProcessed(String id) {
+        ArrayList<RequireChangeGroup> request = new ArrayList<>();
+        String sql = """
+                     select subjectId, groupIdFrom, idTo, groupIdTo, requestDate, [status], comment, dateProcessing
+                     from ChangeGroup
+                     where idFrom = ? and status != -1
+                     order by dateProcessing
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                RequireChangeGroup r = new RequireChangeGroup();
+                r.setSubjectId(rs.getString("subjectId"));
+                r.setGroupIdFrom(rs.getString("groupIdFrom"));
+                r.setIdTo(rs.getString("idTo"));
+                r.setGroupIdTo(rs.getString("groupIdTo"));
+                r.setDateRequire(rs.getString("requestDate"));
+                r.setStatus(rs.getString("status"));
+                r.setComment(rs.getString("comment"));
+                r.setDateProcessing(rs.getTimestamp("dateProcessing"));
+                request.add(r);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return request;
+    }
+
+    public RequireChangeGroup getRequireChangeGroup(String id, String subjectId) {
+        RequireChangeGroup request = new RequireChangeGroup();
+        String sql = """
+                     select subjectId, groupIdFrom, idTo, groupIdTo, requestDate, [status]
+                     from ChangeGroup
+                     where idFrom = ? and status = '-1' and subjectId = ?
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            stm.setString(2, subjectId);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                RequireChangeGroup r = new RequireChangeGroup();
+                r.setSubjectId(rs.getString("subjectId"));
+                r.setGroupIdFrom(rs.getString("groupIdFrom"));
+                r.setIdTo(rs.getString("idTo"));
+                r.setGroupIdTo(rs.getString("groupIdTo"));
+                r.setDateRequire(rs.getString("requestDate"));
+                r.setStatus(rs.getString("status"));
+                return r;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public ArrayList<RequireChangeGroup> getRequiresChangeGroup() {
+        ArrayList<RequireChangeGroup> request = new ArrayList<>();
+        String sql = """
+                     select idFrom, groupIdFrom, subjectId, idTo, groupIdTo, requestDate, [status]
+                     from ChangeGroup where [status] = '-1'
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                RequireChangeGroup r = new RequireChangeGroup();
+                r.setIdFrom(rs.getString("idFrom"));
+                r.setSubjectId(rs.getString("subjectId"));
+                r.setGroupIdFrom(rs.getString("groupIdFrom"));
+                r.setIdTo(rs.getString("idTo"));
+                r.setGroupIdTo(rs.getString("groupIdTo"));
+                r.setDateRequire(rs.getString("requestDate"));
+                r.setStatus(rs.getString("status"));
+                request.add(r);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return request;
+    }
+
+    public void processRequires(String status, Timestamp timeRecord) {
+        if (status.equals("0")) {
+            String sql = """
+                         update ChangeGroup set [status] = '0', dateProcessing = ?
+                         where [status] = '-1'
+                         """;
+
+            try {
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setTimestamp(1, timeRecord);
+                stm.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        if (status.equals("1")) {
+            ArrayList<RequireChangeGroup> requires = getRequiresChangeGroup();
+            for (RequireChangeGroup r : requires) {
+                ArrayList<Schedule> s_from = new ArrayList<>();
+                ArrayList<Schedule> s_to = new ArrayList<>();
+
+                String sql = """
+                              select s.slotId, s.weekday
+                              from Participate p
+                              join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+                              where p.studentId = ? and p.subjectId = ? and p.groupId = ?
+                              """;
+                PreparedStatement stm;
+                try {
+                    stm = connection.prepareStatement(sql);
+                    stm.setString(1, r.getIdFrom());
+                    stm.setString(2, r.getSubjectId());
+                    stm.setString(3, r.getGroupIdFrom());
+                    ResultSet rs = stm.executeQuery();
+                    while (rs.next()) {
+                        Schedule s = new Schedule();
+                        s.setSlotId(rs.getInt("slotId"));
+                        s.setWeekday(rs.getString("weekday"));
+                        s_from.add(s);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    stm = connection.prepareStatement(sql);
+                    stm.setString(1, r.getIdTo());
+                    stm.setString(2, r.getSubjectId());
+                    stm.setString(3, r.getGroupIdTo());
+                    ResultSet rs = stm.executeQuery();
+                    while (rs.next()) {
+                        Schedule s = new Schedule();
+                        s.setSlotId(rs.getInt("slotId"));
+                        s.setWeekday(rs.getString("weekday"));
+                        s_to.add(s);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                boolean flag = true;
+                for (Schedule s_f : s_from) {
+                    for (Schedule s_t : s_to) {
+                        if (s_f.getSlotId() == s_t.getSlotId() && s_f.getWeekday().equalsIgnoreCase(s_t.getWeekday())) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+                if (flag) {
+                    String sql_update = """
+                                        update Participate set groupId = ?
+                                        where studentId = ? and subjectId = ? and groupId = ?
+                                        """;
+                    try {
+                        stm = connection.prepareStatement(sql_update);
+                        stm.setString(1, r.getGroupIdTo());
+                        stm.setString(2, r.getIdFrom());
+                        stm.setString(3, r.getSubjectId());
+                        stm.setString(4, r.getGroupIdFrom());
+                        stm.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try {
+                        stm = connection.prepareStatement(sql_update);
+                        stm.setString(1, r.getGroupIdFrom());
+                        stm.setString(2, r.getIdTo());
+                        stm.setString(3, r.getSubjectId());
+                        stm.setString(4, r.getGroupIdTo());
+                        stm.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    String sql_change = """
+                                        update ChangeGroup set [status] = '1', dateProcessing = ?
+                                        where [status] = '-1' and idFrom = ? and subjectId = ? and groupIdFrom = ?
+                                        """;
+                    try {
+                        stm = connection.prepareStatement(sql_change);
+                        stm.setTimestamp(1, timeRecord);
+                        stm.setString(2, r.getIdFrom());
+                        stm.setString(3, r.getSubjectId());
+                        stm.setString(4, r.getGroupIdFrom());
+                        stm.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    String sql_change = """
+                                        update ChangeGroup set comment = 'Students have the same time slot'
+                                        where [status] = '-1' and idFrom = ? and subjectId = ? and groupIdFrom = ?
+                                        """;
+                    try {
+                        stm = connection.prepareStatement(sql_change);
+                        stm.setTimestamp(1, timeRecord);
+                        stm.setString(2, r.getIdFrom());
+                        stm.setString(3, r.getSubjectId());
+                        stm.setString(4, r.getGroupIdFrom());
+                        stm.executeUpdate();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+
+    public void processRequireStudent(RequireChangeGroup r) {
+        if (r.getStatus().equals("0")) {
+            String sql = """
+                         update ChangeGroup set [status] = '0', dateProcessing = ?, comment = ?
+                         where [status] = '-1' and idFrom = ? and subjectId = ?
+                         """;
+            try {
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setTimestamp(1, r.getDateProcessing());
+                stm.setString(2, r.getComment());
+                stm.setString(3, r.getIdFrom());
+                stm.setString(4, r.getSubjectId());
+                stm.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (r.getStatus().equals("1")) {
+            ArrayList<Schedule> s_from = new ArrayList<>();
+            ArrayList<Schedule> s_to = new ArrayList<>();
+            String sql = """
+                         select s.slotId, s.weekday
+                         from Participate p
+                         join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+                         where p.studentId = ? and p.subjectId = ? and p.groupId = ?
+                         """;
+            PreparedStatement stm;
+            try {
+                stm = connection.prepareStatement(sql);
+                stm.setString(1, r.getIdFrom());
+                stm.setString(2, r.getSubjectId());
+                stm.setString(3, r.getGroupIdFrom());
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    Schedule s = new Schedule();
+                    s.setSlotId(rs.getInt("slotId"));
+                    s.setWeekday(rs.getString("weekday"));
+                    s_from.add(s);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                stm = connection.prepareStatement(sql);
+                stm.setString(1, r.getIdTo());
+                stm.setString(2, r.getSubjectId());
+                stm.setString(3, r.getGroupIdTo());
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    Schedule s = new Schedule();
+                    s.setSlotId(rs.getInt("slotId"));
+                    s.setWeekday(rs.getString("weekday"));
+                    s_to.add(s);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            boolean flag = true;
+            for (Schedule s_f : s_from) {
+                for (Schedule s_t : s_to) {
+                    if (s_f.getSlotId() == s_t.getSlotId() && s_f.getWeekday().equalsIgnoreCase(s_t.getWeekday())) {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            if (flag) {
+                String sql_update = """
+                                    update Participate set groupId = ?
+                                    where studentId = ? and subjectId = ? and groupId = ?
+                                    """;
+                try {
+                    stm = connection.prepareStatement(sql_update);
+                    stm.setString(1, r.getGroupIdTo());
+                    stm.setString(2, r.getIdFrom());
+                    stm.setString(3, r.getSubjectId());
+                    stm.setString(4, r.getGroupIdFrom());
+                    stm.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    stm = connection.prepareStatement(sql_update);
+                    stm.setString(1, r.getGroupIdFrom());
+                    stm.setString(2, r.getIdTo());
+                    stm.setString(3, r.getSubjectId());
+                    stm.setString(4, r.getGroupIdTo());
+                    stm.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                String sql_change = """
+                                    update ChangeGroup set [status] = '1', dateProcessing = ?, comment = ?
+                                    where [status] = '-1' and idFrom = ? and subjectId = ? and groupIdFrom = ?
+                                    """;
+                try {
+                    stm = connection.prepareStatement(sql_change);
+                    stm.setTimestamp(1, r.getDateProcessing());
+                    stm.setString(2, r.getComment());
+                    stm.setString(3, r.getIdFrom());
+                    stm.setString(4, r.getSubjectId());
+                    stm.setString(5, r.getGroupIdFrom());
+                    stm.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                String sql_change = """
+                                    update ChangeGroup set comment = 'Students have the same time slot'
+                                    where [status] = '-1' and idFrom = ? and subjectId = ? and groupIdFrom = ?
+                                    """;
+                try {
+                    stm = connection.prepareStatement(sql_change);
+                    stm.setTimestamp(1, r.getDateProcessing());
+                    stm.setString(2, r.getIdFrom());
+                    stm.setString(3, r.getSubjectId());
+                    stm.setString(4, r.getGroupIdFrom());
+                    stm.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         GroupDBContext gDB = new GroupDBContext();
-        ArrayList<RequireChangeGroup> gs = gDB.getRequiresChangeGroup("HE172387");
+        ArrayList<RequireChangeGroup> gs = gDB.getRequiresChangeGroupProcessed("HE172387");
         for (RequireChangeGroup s : gs) {
             System.out.println(s.getDateRequire());
         }

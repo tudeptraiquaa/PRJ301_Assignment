@@ -53,7 +53,7 @@
 
                     <div class="container">
                         <div class="from">
-                            <div>Change from:</div>
+                            <div style="padding: 10px 10px 10px 0">Change from:</div>
                             <div>
                                 <span onclick="document.getElementById('form').submit()" class="pointer">
                                     Group:
@@ -70,7 +70,7 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-                                <span onclick="document.getElementById('form').submit()" class="pointer">
+                                <span onclick="document.getElementById('form').submit()" class="pointer" >
                                     Subject:
                                 </span>
                                 <select name="subjectId">
@@ -88,7 +88,7 @@
                         </div>
 
                         <div class="to">
-                            <div>Change to:</div>
+                            <div style="padding: 10px 10px 10px 0;">Change to:</div>
                             <div>
                                 <span onclick="document.getElementById('form').submit()" class="pointer">
                                     Student Id:

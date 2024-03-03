@@ -5,13 +5,14 @@
 package controller.group;
 
 import dal.GroupDBContext;
-import dal.StudentDBContext;
+import entity.Account;
 import entity.RequireChangeGroup;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 /**
@@ -24,19 +25,38 @@ public class ViewRequireChangeGroup extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
-        
+
+        HttpSession session = request.getSession();
+
+        Account a = (Account) session.getAttribute("account");
+        int month = Integer.parseInt(request.getParameter("month"));
+        int year = Integer.parseInt(request.getParameter("year"));
+        if (a != null && a.getRole() == 3) {
+            ArrayList<RequireChangeGroup> processing = gDB.getRequiresChangeGroup();
+            if (processing.size() == 0) {
+                request.setAttribute("request", "All requests have been processed");
+            } else {
+                request.setAttribute("processing", processing);
+                request.setAttribute("month", month);
+                request.setAttribute("year", year);
+                request.getRequestDispatcher("../../view/group/viewRequireChange.jsp").forward(request, response);
+            }
+        }
+
         String id = request.getParameter("id");
         if (id != null) {
             ArrayList<RequireChangeGroup> r = gDB.getRequiresChangeGroup(id);
             if (r.size() == 0) {
                 request.setAttribute("request", "No requests were sent");
             } else {
-                request.setAttribute("requires", r);
+                request.setAttribute("processing", r);
+            }
+            
+            ArrayList<RequireChangeGroup> r_done = gDB.getRequiresChangeGroupProcessed(id);
+            if (r_done.size() != 0) {
+                request.setAttribute("processed", r_done);
             }
         }
-
-        int month = Integer.parseInt(request.getParameter("month"));
-        int year = Integer.parseInt(request.getParameter("year"));
 
         request.setAttribute("id", id);
         request.setAttribute("month", month);
