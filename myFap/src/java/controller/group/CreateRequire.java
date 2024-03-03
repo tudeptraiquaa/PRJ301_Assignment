@@ -7,7 +7,6 @@ package controller.group;
 import dal.GroupDBContext;
 import dal.StudentDBContext;
 import entity.IDate;
-import entity.RequireChangeGroup;
 import entity.Student;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class ChangeGroup extends HttpServlet {
+public class CreateRequire extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,58 +29,58 @@ public class ChangeGroup extends HttpServlet {
         String id = request.getParameter("id");
         int month = Integer.parseInt(request.getParameter("month"));
         int year = Integer.parseInt(request.getParameter("year"));
-
-        ArrayList<String> groupsId = gDB.getGroupStudentInFuture(id, month, year);
-        if (groupsId.size() == 0) {
-            request.setAttribute("error", "Khong co lop hoc nao ton tai!");
-        } else {
-            request.setAttribute("groupsId", groupsId);
-        }
-        ArrayList<String> subjectsId;
-        String groupIdFrom = request.getParameter("groupIdFrom");
-        if (groupIdFrom != null) {
-            request.setAttribute("groupIdFrom", groupIdFrom);
-            subjectsId = gDB.getSubjectStudentInFuture(id, month, year, groupIdFrom);
-            if (subjectsId.size() == 0) {
-                request.setAttribute("error", "Khong co mon hoc nao ton tai!");
+        if (id != null) {
+            ArrayList<String> groupsId = gDB.getGroupStudentInFuture(id, month, year);
+            if (groupsId.size() == 0) {
+                request.setAttribute("error", "Khong co lop hoc nao ton tai!");
             } else {
-                request.setAttribute("subjectsId", subjectsId);
+                request.setAttribute("groupsId", groupsId);
             }
-        }
-
-        String subjectId = request.getParameter("subjectId");
-        if (subjectId != null) {
-            request.setAttribute("subjectId", subjectId);
-        }
-
-        String idTo = request.getParameter("idTo");
-        String groupIdTo;
-        if (idTo != null) {
-            if (idTo.equalsIgnoreCase(id)) {
-                request.setAttribute("errorTo", "Same id student!!!");
-            } else {
-                Student s = stuDB.getInformation(idTo);
-                if (s == null) {
-                    request.setAttribute("errorTo", "Student id does not exists!");
+            ArrayList<String> subjectsId;
+            String groupIdFrom = request.getParameter("groupIdFrom");
+            if (groupIdFrom != null) {
+                request.setAttribute("groupIdFrom", groupIdFrom);
+                subjectsId = gDB.getSubjectStudentInFuture(id, month, year, groupIdFrom);
+                if (subjectsId.size() == 0) {
+                    request.setAttribute("error", "Khong co mon hoc nao ton tai!");
                 } else {
-                    request.setAttribute("idTo", idTo);
-                    groupIdTo = gDB.getGroupStudentFuture(idTo, month, year, subjectId);
-                    if (groupIdTo == null) {
-                        request.setAttribute("errorTo", "Student " + idTo + "'s subject " + subjectId + " does not exist");
-                    } else if (groupIdTo.equalsIgnoreCase(groupIdFrom)) {
-                        request.setAttribute("errorTo", "2 students are in the same class, subject " + subjectId);
+                    request.setAttribute("subjectsId", subjectsId);
+                }
+            }
+
+            String subjectId = request.getParameter("subjectId");
+            if (subjectId != null) {
+                request.setAttribute("subjectId", subjectId);
+            }
+
+            String idTo = request.getParameter("idTo");
+            String groupIdTo;
+            if (idTo != null) {
+                if (idTo.equalsIgnoreCase(id)) {
+                    request.setAttribute("errorTo", "Same id student!!!");
+                } else {
+                    Student s = stuDB.getInformation(idTo);
+                    if (s == null) {
+                        request.setAttribute("errorTo", "Student id does not exists!");
                     } else {
-                        request.setAttribute("groupIdTo", groupIdTo);
-                        request.setAttribute("method", "method='post'");
+                        request.setAttribute("idTo", idTo);
+                        groupIdTo = gDB.getGroupStudentFuture(idTo, month, year, subjectId);
+                        if (groupIdTo == null) {
+                            request.setAttribute("errorTo", "Student " + idTo + "'s subject " + subjectId + " does not exist");
+                        } else if (groupIdTo.equalsIgnoreCase(groupIdFrom)) {
+                            request.setAttribute("errorTo", "2 students are in the same class, subject " + subjectId);
+                        } else {
+                            request.setAttribute("groupIdTo", groupIdTo);
+                            request.setAttribute("method", "method='post'");
+                        }
                     }
                 }
             }
-        }
 
-        request.setAttribute("id", id);
+            request.setAttribute("id", id);
+        }
         request.setAttribute("year", year);
         request.setAttribute("month", month);
-
         request.getRequestDispatcher("../view/group/change.jsp").forward(request, response);
     }
 
@@ -111,11 +110,6 @@ public class ChangeGroup extends HttpServlet {
         request.getRequestDispatcher("../view/home/setSuccess.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

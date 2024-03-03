@@ -61,8 +61,8 @@
         <servlet-class>controller.lecturer.ChangeLecturer</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ChangeGroup</servlet-name>
-        <servlet-class>controller.group.ChangeGroup</servlet-class>
+        <servlet-name>CreateRequire</servlet-name>
+        <servlet-class>controller.group.CreateRequire</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ActivityGroup</servlet-name>
@@ -133,8 +133,8 @@
         <url-pattern>/lecturer/change</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ChangeGroup</servlet-name>
-        <url-pattern>/group/change</url-pattern>
+        <servlet-name>CreateRequire</servlet-name>
+        <url-pattern>/group/createRequire</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ActivityGroup</servlet-name>

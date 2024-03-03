@@ -38,79 +38,101 @@
 
             <div class="logout"><a href="../../home/login">logout</a></span></div>
         </div>
-        <div style="font-size: 24px; margin-bottom: 20px">
-            Student ${id}
+        <div>
+            <form action="../../group/change/viewRequire">
+                <input type="hidden" name="month" value="${month}">
+                <input type="hidden" name="year" value="${year}">
+                Student: <input type="text" name="id" value="${requestScope.id}" <c:if test="${account.role eq 1}">readonly</c:if>>
+                <c:if test="${account.role ne 1}">
+                    <input type="submit" value="Search">
+                </c:if>
+            </form>
         </div>
-        <div style="background-color: #5CB85C; color: white; border-radius: 10px; display: inline-block; padding:  10px; margin-bottom: 10px">
-            <a href="../../group/change?id=${id}&month=${month}&year=${year}" style="color: white">Tạo yêu cầu</a>
+        <c:if test="${account.role eq 1}">
+            <div style="background-color: #5CB85C; color: white; border-radius: 10px; display: inline-block; padding:  10px; margin-bottom: 10px; margin-top: 10px;">
+                <a href="../../group/createRequire?id=${id}&month=${month}&year=${year}" style="color: white">Tạo yêu cầu</a>
+            </div>
+        </c:if>
+        <div>
+            ${request}
         </div>
-        ${request}
-        <c:if test="${request eq null}">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="no">
-                                No    
-                            </div>
-                        </th>
-                        <th>
-                            SubjectId
-                        </th>
-                        <th>
-                            From Group
-                        </th>
-                        <th>
-                            To Student Id
-                        </th>
-                        <th>
-                            To Group
-                        </th>
-                        <th>
-                            Date Request
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <c:set var="no" value="1"></c:set>
-                    <c:forEach items="${requires}" var="r">
+        <c:if test="${request eq null and requires ne null}">
+            <form style="width:100%">
+                <table>
+                    <thead>
                         <tr>
-                            <td>
+                            <th>
                                 <div class="no">
-                                    ${no}
+                                    No    
                                 </div>
-                                <c:set var="no" value="${no + 1}">
-                                </c:set>            
-                            </td>
-                            <td>
-                                ${r.subjectId}
-                            </td>
-                            <td>
-                                ${r.groupIdFrom}
-                            </td>
-                            <td>
-                                ${r.idTo}
-                            </td>
-                            <td>
-                                ${r.groupIdTo}
-                            </td>
-                            <td>
-                                ${r.dateRequire}
-                            </td>
-                            <td>
-                                <c:if test="${r.status eq -1}">
-                                    Processing...
-                                </c:if>
-                            </td>
+                            </th>
+                            <th>
+                                SubjectId
+                            </th>
+                            <th>
+                                From Group
+                            </th>
+                            <th>
+                                To Student Id
+                            </th>
+                            <th>
+                                To Group
+                            </th>
+                            <th>
+                                Date Request
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <c:if test="${account.role eq 3}">
+                                <th>
+
+                                </th>
+                            </c:if>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        <c:set var="no" value="1"></c:set>
+                        <c:forEach items="${requires}" var="r">
+                            <tr>
+                                <td>
+                                    <div class="no">
+                                        ${no}
+                                    </div>
+                                    <c:set var="no" value="${no + 1}">
+                                    </c:set>            
+                                </td>
+                                <td>
+                                    ${r.subjectId}
+                                </td>
+                                <td>
+                                    ${r.groupIdFrom}
+                                </td>
+                                <td>
+                                    ${r.idTo}
+                                </td>
+                                <td>
+                                    ${r.groupIdTo}
+                                </td>
+                                <td>
+                                    ${r.dateRequire}
+                                </td>
+                                <td>
+                                    <c:if test="${r.status eq -1}">
+                                        Processing...
+                                    </c:if>
+                                </td>
+                                <c:if test="${account.role eq 3}">
+                                    <td>
+                                        
+                                    </td>
+                                </c:if>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </form>
         </c:if>
         <div class="footer">
             <div id="ctl00_divSupport" style="text-align: center; border-bottom: 1px solid #f5f5f5; padding-bottom: 5px">

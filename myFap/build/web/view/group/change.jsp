@@ -46,7 +46,7 @@
         </div>
         <c:if test="${error eq null}">
             <div>
-                <form action="../group/change" id="form" onchange="document.getElementById('form').submit()" ${method}>
+                <form action="../group/createRequire" id="form" onchange="document.getElementById('form').submit()" ${method}>
                     <input type="hidden" name="id" value="${id}">
                     <input type="hidden" name="month" value="${month}">
                     <input type="hidden" name="year" value="${year}">
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="submit" value="Create Request">
+                    <input type="submit" value="Create Require">
                 </form>
             </div>
         </c:if>

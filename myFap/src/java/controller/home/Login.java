@@ -67,7 +67,7 @@ public class Login extends HttpServlet {
         }
         request.setAttribute("termId", termId);
         request.setAttribute("now", now);
-        
+        request.setAttribute("month", month);
         request.setAttribute("week", week);
         request.setAttribute("currentYear", currentYear);
         if(acc != null){

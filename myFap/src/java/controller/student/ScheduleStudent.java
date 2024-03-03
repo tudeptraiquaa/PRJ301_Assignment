@@ -91,7 +91,7 @@ public class ScheduleStudent extends HttpServlet {
         } else {
             termId = "FA";
         }
-        
+
         ArrayList<Slot> slots = stuDB.getSlot();
         ArrayList<Schedule> schedules = new ArrayList<>();
         ArrayList<IDate> dates = new ArrayList<>();
@@ -106,9 +106,11 @@ public class ScheduleStudent extends HttpServlet {
             dates = myDate.getRangeDate(from, to);
             schedules = stuDB.getScheduleStudent(studentId, fromDate, toDate);
         }
-        Student s = stuDB.getInformation(studentId);
-        if (s == null) {
-            request.setAttribute("error", "Student id does not exists!");
+        if (studentId != null) {
+            Student s = stuDB.getInformation(studentId);
+            if (s == null) {
+                request.setAttribute("error", "Student id does not exists!");
+            }
         }
 
         request.setAttribute("termId", termId);

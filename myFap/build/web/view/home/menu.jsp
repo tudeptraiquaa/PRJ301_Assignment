@@ -27,7 +27,6 @@
             </div>
         </div>
 
-
         <c:if test="${account.role eq 1}">
             <div class="setting">
                 <div>
@@ -195,7 +194,10 @@
                                 <span>(Thời khóa biểu từng tuần)</span>
                             </li>
                             <li>
-                                <a href="../group/change">
+                                <a href="../group/change/viewRequire?year=${currentYear}&month=${month}">
+                                    Requires change group
+                                </a>
+                                <span>(Yêu cầu đổi chéo lớp với sinh viên)</span>
                             </li>
                         </ul>
                     </div>
