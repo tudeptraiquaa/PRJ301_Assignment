@@ -204,9 +204,9 @@ public class MyDate extends DBContext<IEntity> {
     
     public static void main(String[] args) {
         MyDate m = new MyDate();
-        ArrayList<IDate> dates = m.getRangeDate(new IDate("2024-02-01"), new IDate("2024-02-10"));
+        ArrayList<IDate> dates = m.getDateInTerm("SU", 2024);
         for(IDate d : dates){
-            System.out.println(d.toInt());
+            System.out.println(d);
         }
     }
 

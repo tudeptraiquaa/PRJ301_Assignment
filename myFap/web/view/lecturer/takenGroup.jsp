@@ -58,7 +58,7 @@
             <tbody>
                 <c:forEach items="${requestScope.schedules}" var="sche">
                     <tr>
-                        <td class="slot">
+                        <td>
                             ${sche.slotId}
                         </td>
                         <td class="subject">

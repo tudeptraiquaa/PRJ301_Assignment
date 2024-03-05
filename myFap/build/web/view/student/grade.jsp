@@ -118,7 +118,7 @@
 
                                     </c:forEach>
 
-                                    <div style="display:flex">
+                                    <div style="display:flex; background-color: #f5f5f5" class="total">
                                         <div class="grade_item">
                                             Total
                                         </div>
@@ -203,7 +203,7 @@
 
 
 
-                                    <c:if test="${!(requestScope.dateBegin.compare(now) <= 0 and requestScope.dateEnd.compare(now) >= 0)}">
+                                    <c:if test="${requestScope.dateEnd.compare(now) < 0}">
                                         <div class="grade_weight">
                                             <c:if test="${totalFinalResit eq null}">
                                                 <c:if test="${sum >= 5 and totalFinal/totalWeight >= 4}">

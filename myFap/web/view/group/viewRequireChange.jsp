@@ -142,7 +142,7 @@
                             </c:if>
                             <c:if test="${account.role eq 3}">
                                 <td>
-                                    <input type="text" name="comment" placeholder="reason...">
+                                    <textarea name="comment" placeholder="reason...">${r.comment}</textarea>
                                 </td>
                             </c:if>
                             <c:if test="${account.role eq 3}">
@@ -161,6 +161,7 @@
         <c:if test="${account.role eq 3}">
             <a href="../../group/change/process?status=1&month=${month}&year=${year}">Accept All</a> | 
             <a href="../../group/change/process?status=0&month=${month}&year=${year}">Reject All</a>
+            ${status}
         </c:if>
     </c:if>
 
@@ -175,7 +176,7 @@
                                 No    
                             </div>
                         </th>
-                        
+
                         <th>
                             SubjectId
                         </th>

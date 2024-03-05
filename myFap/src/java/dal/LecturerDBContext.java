@@ -90,7 +90,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
         String sql = """
                      select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer
                      from isTaken i
-                     join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId
+                     join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId and i.subjectId = l.subjectId
                      join Schedule s on s.groupId = l.groupId and s.subjectId = l.subjectId and i.slotId = s.slotId
                      where ((i.lecturerId = ? and i.changeLecturer is null) or i.changeLecturer = ?) 
                      and i.[date] >= ? and [date] <= ?
@@ -131,7 +131,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
         String sql = """
                      select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer
                      from isTaken i
-                     join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId
+                     join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId and i.subjectId = l.subjectId
                      join Schedule s on s.groupId = l.groupId and s.subjectId = l.subjectId and i.slotId = s.slotId
                      where ((i.lecturerId = ? and i.changeLecturer is null) or i.changeLecturer = ?) 
                      and i.[date] >= ? and [date] <= ?
@@ -172,7 +172,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
         String sql = """
                      select distinct i.lecturerId, i.groupId, l.subjectId, i.slotId, i.date, i.changeLecturer, s.name, sche.roomId, i.status
                      from isTaken i
-                     join Lession l on l.groupId = i.groupId and l.lecturerId = i.lecturerId
+                     join Lession l on l.groupId = i.groupId and l.lecturerId = i.lecturerId and i.subjectId = l.subjectId
                      join Schedule sche on sche.groupId = i.groupId and sche.subjectId = l.subjectId and i.slotId = sche.slotId
                      join Subject s on sche.subjectId = s.id
                      where ((i.lecturerId = ? and i.changeLecturer is null) or i.changeLecturer = ?)

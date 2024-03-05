@@ -85,8 +85,10 @@
                                 img
                             </td>
                             <td>
-                                Absent <input type="radio" name="${s.id}status" value="0"> 
-                                Present <input type="radio" name="${s.id}status" value="1" checked>
+                                <div style="width: 200px">
+                                    Absent <input type="radio" name="${s.id}status" value="0"> 
+                                    Present <input type="radio" name="${s.id}status" value="1" checked>
+                                </div>
                             </td>
                             <td>
                                 <input type="text" name="${s.id}description">

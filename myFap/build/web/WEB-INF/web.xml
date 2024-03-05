@@ -76,6 +76,30 @@
         <servlet-name>ChangeGroupProcess</servlet-name>
         <servlet-class>controller.group.ChangeGroupProcess</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OptionScheduleLecturerAjax</servlet-name>
+        <servlet-class>ajax.lecturer.OptionScheduleLecturerAjax</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TableWeekScheduleLecturerAjax</servlet-name>
+        <servlet-class>ajax.lecturer.TableWeekScheduleLecturerAjax</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TableDateScheduleLecturerAjax</servlet-name>
+        <servlet-class>ajax.lecturer.TableDateScheduleLecturerAjax</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OptionScheduleStudentAjax</servlet-name>
+        <servlet-class>ajax.student.OptionScheduleStudentAjax</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TableWeekScheduleStudentAjax</servlet-name>
+        <servlet-class>ajax.student.TableWeekScheduleStudentAjax</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TableDateScheduleStudentAjax</servlet-name>
+        <servlet-class>ajax.student.TableDateScheduleStudentAjax</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home/login</url-pattern>
@@ -151,6 +175,30 @@
     <servlet-mapping>
         <servlet-name>ChangeGroupProcess</servlet-name>
         <url-pattern>/group/change/process</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OptionScheduleLecturerAjax</servlet-name>
+        <url-pattern>/ajax/lecturer/schedule/option</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TableWeekScheduleLecturerAjax</servlet-name>
+        <url-pattern>/ajax/lecturer/schedule/table/week</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TableDateScheduleLecturerAjax</servlet-name>
+        <url-pattern>/ajax/lecturer/schedule/table/date</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OptionScheduleStudentAjax</servlet-name>
+        <url-pattern>/ajax/student/schedule/option</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TableWeekScheduleStudentAjax</servlet-name>
+        <url-pattern>/ajax/student/schedule/table/week</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TableDateScheduleStudentAjax</servlet-name>
+        <url-pattern>/ajax/student/schedule/table/date</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>

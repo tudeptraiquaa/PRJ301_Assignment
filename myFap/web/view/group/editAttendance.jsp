@@ -93,8 +93,10 @@
                                 img
                             </td>
                             <td>
-                                Absent <input type="radio" name="${a.studentId}status" value="0" <c:if test="${!a.status}">checked</c:if>> 
-                                Present <input type="radio" name="${a.studentId}status" value="1" <c:if test="${a.status}">checked</c:if>>
+                                <div style="width: 200px">
+                                    Absent <input type="radio" name="${a.studentId}status" value="0" <c:if test="${!a.status}">checked</c:if>> 
+                                    Present <input type="radio" name="${a.studentId}status" value="1" <c:if test="${a.status}">checked</c:if>>
+                                    </div>
                                 </td>
                                 <td>
                                     <input type="text" name="${a.studentId}description" value="${a.description}">

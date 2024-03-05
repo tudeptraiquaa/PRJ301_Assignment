@@ -136,12 +136,12 @@ public class StudentDBContext extends DBContext<Student> {
             sql = """
                   select a.date as dateBegin, b.date as dateEnd from
                   (select top 1 l.groupId, l.subjectId, i.date from isTaken i
-                  join Lession l on i.groupId = l.groupId and i.lecturerId = l.lecturerId
+                  join Lession l on i.groupId = l.groupId and i.lecturerId = l.lecturerId and i.subjectId = l.subjectId
                   where l.subjectId = ? and l.groupId = ?
                   order by i.date) a
                   join
                   (select top 1 l.groupId, l.subjectId, i.date from isTaken i
-                  join Lession l on i.groupId = l.groupId and i.lecturerId = l.lecturerId
+                  join Lession l on i.groupId = l.groupId and i.lecturerId = l.lecturerId and i.subjectId = l.subjectId
                   where l.subjectId = ? and l.groupId = ?
                   order by i.date desc) b
                   on a.groupId = b.groupId and a.subjectId = b.subjectId
@@ -313,7 +313,7 @@ public class StudentDBContext extends DBContext<Student> {
                      select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status]
                      from Participate p 
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
-                     join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId
+                     join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId and l.subjectId = i.subjectId
                      join Schedule sche on sche.groupId = p.groupId and sche.subjectId = p.subjectId and i.slotId = sche.slotId
                      left join Attendance a on a.date = i.date and a.groupId = p.groupId and a.subjectId = p.subjectId and p.studentId = a.studentId
                      where p.studentId = ?
@@ -427,7 +427,7 @@ public class StudentDBContext extends DBContext<Student> {
                      sche.roomId, l.lecturerId, p.groupId, a.isPresent, a.[description], i.status as isTakenGroup
                      from Participate p
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
-                     join isTaken i on i.groupId = l.groupId and i.lecturerId = l.lecturerId
+                     join isTaken i on i.groupId = l.groupId and i.lecturerId = l.lecturerId and l.subjectId = i.subjectId
                      join Schedule sche on sche.groupId = p.groupId and sche.subjectId = p.subjectId and sche.slotId = i.slotId
                      join Slot s on s.id = i.slotId
                      left join Attendance a on a.studentId = p.studentId and a.groupId = p.groupId

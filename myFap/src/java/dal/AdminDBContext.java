@@ -26,7 +26,8 @@ public class AdminDBContext extends DBContext {
         String sql = """
                      select distinct le.lecturerId, le.groupId, le.subjectId, le.numLession, sche.termId, sche.year, sche.roomId
                      from Lession le
-                     join Schedule sche on le.groupId = sche.groupId and le.subjectId = sche.subjectId""";
+                     join Schedule sche on le.groupId = sche.groupId and le.subjectId = sche.subjectId
+                     """;
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
@@ -63,6 +64,7 @@ public class AdminDBContext extends DBContext {
         }
 
         for (Lession l : lessions) {
+            System.out.println(l.getGroupId()+" "+ l.getSubjectId()+" "+l.getTermId()+" "+l.getYear()+" "+l.getNumLession());
             ArrayList<IDate> dateInTerm = myDate.getDateInTerm(l.getTermId(), l.getYear());
             ArrayList<Holiday> holidays = myDate.getHolidays(l.getYear());
             ArrayList<Calendar> calendars = new ArrayList<>();
@@ -106,7 +108,7 @@ public class AdminDBContext extends DBContext {
         }
         for (Schedule s : schedules) {
             String sql = """
-                         insert into isTaken (lecturerId, groupId, slotId, [date]) values (?, ?, ?, ?)
+                         insert into isTaken (lecturerId, groupId, slotId, [date], subjectId) values (?, ?, ?, ?, ?)
                          """;
             try {
                 PreparedStatement stm = connection.prepareStatement(sql);
@@ -114,6 +116,7 @@ public class AdminDBContext extends DBContext {
                 stm.setString(2, s.getGroupId());
                 stm.setInt(3, s.getSlotId());
                 stm.setString(4, s.getDate().toString());
+                stm.setString(5, s.getSubjectId());
                 stm.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(AdminDBContext.class.getName()).log(Level.SEVERE, null, ex);

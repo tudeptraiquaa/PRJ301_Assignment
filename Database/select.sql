@@ -244,4 +244,38 @@ join Term t on t.id = s.termId
 where p.studentId = 'HE172387' and p.groupId = 'SE1817'
 and ((s.year = 2023 and t.monthBegin > 12) or (s.year >= 2023+1))
 
+-- lay ra mon hoc trung slot
 
+select s.slotId, s.[weekday], t.monthBegin, s.year
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+join Term t on t.id = s.termId
+where p.studentId = 'HE170240' and p.groupId = 'SE1821'
+and ((s.[year] = 2024 and t.monthBegin > 4) or s.[year] > 2025)
+and p.subjectId != 'ACC101' and s.slotId = 4 and s.[weekday] = 5
+
+select s.slotId, s.weekday, s.termId
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+where p.studentId = 'HE172387' and p.subjectId = 'ACC101' and p.groupId = 'SE1817'
+
+select s.slotId, s.weekday, s.termId
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+where p.studentId = 'HE170240' and p.subjectId = 'ACC101' and p.groupId = 'SE1821'
+
+select s.slotId, s.[weekday], t.monthBegin, s.year, s.subjectId
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+join Term t on t.id = s.termId
+where p.studentId = 'HE172387' and s.termId = 'SU'
+and p.subjectId != 'ACC101' and s.slotId = 2 and s.[weekday] = 2
+
+select s.slotId, s.[weekday], t.monthBegin, s.year, s.subjectId
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+join Term t on t.id = s.termId
+where p.studentId = 'HE170240' and s.termId = 'SU'
+and p.subjectId != 'ACC101' and s.slotId = 4 and s.[weekday] = 5
+
+select * from ChangeGroup

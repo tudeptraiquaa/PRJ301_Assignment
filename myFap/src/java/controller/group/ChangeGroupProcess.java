@@ -7,7 +7,6 @@ package controller.group;
 import dal.GroupDBContext;
 import entity.RequireChangeGroup;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,7 +59,9 @@ public class ChangeGroupProcess extends HttpServlet {
         r.setComment(request.getParameter("comment"));
         r.setStatus(request.getParameter("status").equalsIgnoreCase("Reject") ? "0" : "1");
         r.setDateProcessing(timeRecord);
-        gDB.processRequireStudent(r);
+        boolean status = gDB.processRequireStudent(r);
+        request.setAttribute("status", status);
+                
         request.setAttribute("month", month);
         request.setAttribute("year", year);
         ArrayList<RequireChangeGroup> processing = gDB.getRequiresChangeGroup();

@@ -404,6 +404,27 @@ insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday)
 insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'PRJ301', 'BE-207', 'SLot2', 'SP', 2024, 3)
 insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'PRJ301', 'BE-207', 'SLot1', 'SP', 2024, 5)
 
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'ACC101', 'BE-207', 2, 'SU', 2024, 2)
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'EXE101', 'BE-207', 3, 'SU', 2024, 3)
+
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1817', 'ACC101', 'BE-109', 4, 'SU', 2024, 5)
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1817', 'PRM392', 'BE-109', 2, 'SU', 2024, 2)
+
+select * from Term
+
+
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1821', 'DonNT3', 'ACC101')
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1821', 'TuanVM2', 'EXE101')
+
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'SonNT5', 'ACC101')
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'OanhNT75', 'PRM392')
+
+insert into Participate (studentId, subjectId, groupId) values ('HE172387', 'ACC101', 'SE1817')
+insert into Participate (studentId, subjectId, groupId) values ('HE172387', 'PRM392', 'SE1817')
+
+insert into Participate (studentId, subjectId, groupId) values ('HE170240', 'ACC101', 'SE1821')
+insert into Participate (studentId, subjectId, groupId) values ('HE170240', 'EXE101', 'SE1821')
+
 --
 insert into Lession (groupId, lecturerId, subjectId) values ('IOT1702', 'SonNT5', 'PRF192')
 insert into Lession (groupId, lecturerId, subjectId) values ('AI1604', 'SonNT5', 'DBI202')
@@ -429,6 +450,8 @@ insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'OanhNT75
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'QuanTL3', 'DBI202')
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'TuanVM2', 'LAB211')
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'DungLTK', 'JPD113')
+
+update Lession set numLession = 20 where subjectId != 'IOT102'
 
 create table Account(
 [user] nvarchar(50) primary key,
@@ -606,6 +629,7 @@ insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387'
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'Pt', '8')
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'Pt', '8.3')
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'PE', '9')
-insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'FE', '9.4')
-
-select * from Score
+select s.slotId, s.weekday
+from Participate p
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+where p.studentId = 'HE172387'
