@@ -5,7 +5,12 @@
         <group>
             <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ChangeGroupProcess.java</file>
             <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/viewRequireChange.jsp</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/lecturer/takenGroup.jsp</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/css/style.css</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/editAttendance.jsp</file>
             <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/dal/GroupDBContext.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/attendance.jsp</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/student/grade.jsp</file>
         </group>
     </open-files>
 </project-private>
