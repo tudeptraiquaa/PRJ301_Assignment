@@ -351,7 +351,7 @@ public class StudentDBContext extends DBContext<Student> {
                      select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status]
                      from Participate p 
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
-                     join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId
+                     join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId and l.subjectId = i.subjectId
                      join Schedule sche on sche.groupId = p.groupId and sche.subjectId = p.subjectId and i.slotId = sche.slotId
                      left join Attendance a on a.date = i.date and a.groupId = p.groupId and a.subjectId = p.subjectId and p.studentId = a.studentId
                      where p.studentId = ?

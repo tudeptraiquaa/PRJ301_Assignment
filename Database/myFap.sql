@@ -406,17 +406,20 @@ insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday)
 
 insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'ACC101', 'BE-207', 2, 'SU', 2024, 2)
 insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'EXE101', 'BE-207', 3, 'SU', 2024, 3)
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1821', 'PRM392', 'BE-207', 1, 'SU', 2024, 2)
 
 insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1817', 'ACC101', 'BE-109', 4, 'SU', 2024, 5)
-insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1817', 'PRM392', 'BE-109', 2, 'SU', 2024, 2)
+insert into Schedule (groupId, subjectId, roomId, slotId, termId, year, weekday) values ('SE1817', 'PRM392', 'BE-109', 2, 'SU', 2024, 6)
 
 select * from Term
 
 
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1821', 'DonNT3', 'ACC101')
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1821', 'TuanVM2', 'EXE101')
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1821', 'DonNT3', 'PRM392')
 
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'SonNT5', 'ACC101')
+insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'SonNT5', 'PRM392')
 insert into Lession (groupId, lecturerId, subjectId) values ('SE1817', 'OanhNT75', 'PRM392')
 
 insert into Participate (studentId, subjectId, groupId) values ('HE172387', 'ACC101', 'SE1817')
@@ -624,6 +627,8 @@ insert into Participate (studentId, subjectId, groupId) values ('HE173353', 'IOT
 insert into Participate (studentId, subjectId, groupId) values ('HE173353', 'PRJ301', 'SE1821')
 insert into Participate (studentId, subjectId, groupId) values ('HE173353', 'JPD123', 'SE1821')
 
+insert into Participate (studentId, subjectId, groupId) values ('HE170240', 'PRM392', 'SE1821')
+
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'Asm', '10')
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'Asm', '9')
 insert into Score (studentId, subjectId, assessmentId, value) values ('HE172387', 'CSD201', 'Pt', '8')
@@ -633,3 +638,22 @@ select s.slotId, s.weekday
 from Participate p
 join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
 where p.studentId = 'HE172387'
+
+create table [Role]
+(
+id int primary key,
+[name] nvarchar(50)
+)
+
+create table Feature
+(
+id int primary key,
+[name] nvarchar(150),
+[url] nvarchar(150)
+)
+
+create table Role_Feature
+(
+roleId int foreign key references [Role](id),
+featureId int  foreign key references Feature(id)
+)
