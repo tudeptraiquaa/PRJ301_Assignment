@@ -4,12 +4,13 @@
  */
 package controller.student;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.StudentDBContext;
+import entity.Account;
 import entity.IDate;
 import entity.Student;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -21,10 +22,10 @@ import java.util.Locale;
  *
  * @author tu
  */
-public class InformationStudent extends HttpServlet {
+public class InformationStudent extends BaseRequireAuthentication {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
         String studentId = request.getParameter("id");
         StudentDBContext stuDB = new StudentDBContext();
@@ -51,7 +52,7 @@ public class InformationStudent extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
     }
 

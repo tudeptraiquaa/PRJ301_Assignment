@@ -4,15 +4,16 @@
  */
 package controller.student;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.GroupDBContext;
 import dal.StudentDBContext;
+import entity.Account;
 import entity.Attendance;
 import entity.IDate;
 import entity.Subject;
 import entity.Term;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -23,10 +24,10 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class AttendanceStudent extends HttpServlet {
+public class AttendanceStudent extends BaseRequireAuthentication {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
         
@@ -81,7 +82,7 @@ public class AttendanceStudent extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
     }
 

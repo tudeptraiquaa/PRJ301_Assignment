@@ -28,13 +28,14 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+       request.getSession().invalidate();
        request.getRequestDispatcher("../view/home/login.jsp").forward(request, response);
     } 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         String user = request.getParameter("user");
+        String user = request.getParameter("user");
         String pass = request.getParameter("password");
         AccountDBContext aDB = new AccountDBContext();
         Account acc = aDB.getAccount(user, pass);

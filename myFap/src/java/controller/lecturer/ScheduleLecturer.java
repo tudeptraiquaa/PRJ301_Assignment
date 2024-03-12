@@ -4,7 +4,9 @@
  */
 package controller.lecturer;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.LecturerDBContext;
+import entity.Account;
 import entity.IDate;
 import entity.IWeek;
 import entity.Lecturer;
@@ -26,10 +28,10 @@ import java.util.Locale;
  *
  * @author tu
  */
-public class ScheduleLecturer extends HttpServlet {
+public class ScheduleLecturer extends BaseRequireAuthentication {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account a)
             throws ServletException, IOException {
         LecturerDBContext lecDB = new LecturerDBContext();
         MyDate myDate = new MyDate();
@@ -139,5 +141,10 @@ public class ScheduleLecturer extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

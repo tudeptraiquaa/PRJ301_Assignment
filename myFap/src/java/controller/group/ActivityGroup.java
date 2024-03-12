@@ -4,12 +4,13 @@
  */
 package controller.group;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.StudentDBContext;
+import entity.Account;
 import entity.Attendance;
 import entity.IDate;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -19,10 +20,10 @@ import java.time.format.DateTimeFormatter;
  *
  * @author tu
  */
-public class ActivityGroup extends HttpServlet {
+public class ActivityGroup extends BaseRequireAuthentication{
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
         String id = request.getParameter("id");
         String d = request.getParameter("date");
@@ -51,7 +52,7 @@ public class ActivityGroup extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
     }
 

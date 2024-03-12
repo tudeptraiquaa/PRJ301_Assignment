@@ -3,18 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ChangeGroupProcess.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/lecturer/schedule.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/viewRequireChange.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/student/schedule.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/lecturer/takenGroup.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/css/style.css</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/GradeStudent.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/authentication/BaseRequireAuthentication.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/StudentGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ViewAttendanceGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/EditAttendanceGroup.java</file>
             <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/ScheduleStudent.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/editAttendance.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/dal/GroupDBContext.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/WEB-INF/web.xml</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/group/attendance.jsp</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/student/grade.jsp</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/InformationStudent.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/CurriculumStudent.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/lecturer/ChangeLecturer.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ActivityGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/home/Login.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/ajax/student/OptionScheduleStudentAjax.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ChangeGroupProcess.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/CreateRequire.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/EditGradeStudent.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/AttendanceGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/group/ViewRequireChangeGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/ajax/lecturer/OptionScheduleLecturerAjax.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/lecturer/TakenGroup.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/lecturer/InformationLecturer.java</file>
         </group>
     </open-files>
 </project-private>

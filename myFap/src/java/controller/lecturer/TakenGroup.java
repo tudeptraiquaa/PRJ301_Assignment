@@ -5,11 +5,12 @@
 
 package controller.lecturer;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.LecturerDBContext;
+import entity.Account;
 import entity.Schedule;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class TakenGroup extends HttpServlet {
+public class TakenGroup extends BaseRequireAuthentication {
    
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account a)
     throws ServletException, IOException {
         LecturerDBContext lecDB = new LecturerDBContext();
         String id = request.getParameter("id");
@@ -35,7 +36,7 @@ public class TakenGroup extends HttpServlet {
     } 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account a)
     throws ServletException, IOException {
     }
 

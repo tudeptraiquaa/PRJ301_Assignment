@@ -4,11 +4,12 @@
  */
 package controller.group;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.GroupDBContext;
+import entity.Account;
 import entity.RequireChangeGroup;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
@@ -18,10 +19,10 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class ChangeGroupProcess extends HttpServlet {
+public class ChangeGroupProcess extends BaseRequireAuthentication {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account a)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
         int month = Integer.parseInt(request.getParameter("month"));
@@ -42,7 +43,7 @@ public class ChangeGroupProcess extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account a)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
         int month = Integer.parseInt(request.getParameter("month"));

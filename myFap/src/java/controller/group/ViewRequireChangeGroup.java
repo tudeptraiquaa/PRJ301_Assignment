@@ -4,12 +4,12 @@
  */
 package controller.group;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.GroupDBContext;
 import entity.Account;
 import entity.RequireChangeGroup;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -19,10 +19,10 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class ViewRequireChangeGroup extends HttpServlet {
+public class ViewRequireChangeGroup extends BaseRequireAuthentication {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account acount)
             throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
 
@@ -65,7 +65,7 @@ public class ViewRequireChangeGroup extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
     }
 

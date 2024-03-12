@@ -5,11 +5,12 @@
 
 package controller.group;
 
+import controller.authentication.BaseRequireAuthentication;
 import dal.GroupDBContext;
+import entity.Account;
 import entity.Attendance;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -18,10 +19,10 @@ import java.util.ArrayList;
  *
  * @author tu
  */
-public class ViewAttendanceGroup extends HttpServlet {
+public class ViewAttendanceGroup extends BaseRequireAuthentication {
    
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account a)
     throws ServletException, IOException {
         GroupDBContext gDB = new GroupDBContext();
         String lecturerId = request.getParameter("id");
@@ -43,7 +44,7 @@ public class ViewAttendanceGroup extends HttpServlet {
     } 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response, Account a)
     throws ServletException, IOException {
     }
 
