@@ -33,7 +33,10 @@ public class ChangeSessionLecturer extends BaseRequireAuthentication {
         s.setLecturerId(lecturerId);
         s.setGroupId(groupId);
         s.setSubjectId(subjectId);
-        s.setDate(new IDate(request.getParameter("fromDate")));
+        String fromDate = request.getParameter("fromDate");
+        if (fromDate != null) {
+            s.setDate(new IDate(request.getParameter("fromDate")));
+        }
         s.setSlotId(Integer.parseInt(request.getParameter("fromSlotId")));
         s.setRoomId(request.getParameter("fromRoomId"));
         String toDate = request.getParameter("toDate") == null ? request.getParameter("fromDate") : request.getParameter("toDate");
@@ -54,6 +57,9 @@ public class ChangeSessionLecturer extends BaseRequireAuthentication {
         if (toRoomId != null) {
             request.setAttribute("toRoomId", toRoomId);
         }
+        IDate now = new IDate();
+        
+        request.setAttribute("now", now);
         request.setAttribute("toDate", toDate);
         request.setAttribute("schedule", s);
         request.getRequestDispatcher("../view/lecturer/changeSession.jsp").forward(request, response);
@@ -68,9 +74,11 @@ public class ChangeSessionLecturer extends BaseRequireAuthentication {
         int toSlotId = Integer.parseInt(request.getParameter("toSlotId"));
         String toDate = request.getParameter("toDate");
         String toRoomId = request.getParameter("toRoomId");
-        
+
         LecturerDBContext lecDB = new LecturerDBContext();
         lecDB.changeSession(lecturerId, fromDate, fromSlotId, toDate, toSlotId, toRoomId);
+        request.setAttribute("set", "Change success");
+        request.getRequestDispatcher("../view/home/setSuccess.jsp").forward(request, response);
     }
 
     /**

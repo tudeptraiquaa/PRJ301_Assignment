@@ -69,6 +69,7 @@ public class ChangeLecturer extends BaseRequireAuthentication {
         }
         if (check) {
             lecDB.changeLecturer(id, groupId, Integer.parseInt(slotId), date, newId);
+            request.setAttribute("set", "Change success");
             request.getRequestDispatcher("../view/home/setSuccess.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Teachers have the same teaching slot!");

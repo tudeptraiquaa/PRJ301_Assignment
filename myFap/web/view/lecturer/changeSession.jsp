@@ -104,7 +104,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="date" name="toDate" value="${toDate==null?schedule.date:toDate}" min="${schedule.date}">
+                            <input type="date" name="toDate" value="${toDate==null?schedule.date:toDate}" min="${now}">
                         </td>
                         <td>
                             <c:if test="${slots ne null}">

@@ -214,7 +214,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
     public void changeLecturer(String id, String groupId, int slotId, String date, String newId) {
         String sql = """
                      update isTaken set changeLecturer = ?
-                     where (lecturerId = ? or changeLecturer = ?) and groupId = ? and date = ? and slotId = ?
+                     where (lecturerId = ? or changeLecturer = ?) and groupId = ? and date = ? and ((slotId = ? and changeSlot is null) or changeSlot = ?)
                      """;
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -224,6 +224,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
             stm.setString(4, groupId);
             stm.setString(5, date);
             stm.setInt(6, slotId);
+            stm.setInt(7, slotId);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,7 +235,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
     public void changeSession(String lecturerId, String fromDate, int fromSlotId, String toDate, int toSlotId, String toRoomId){
         String sql = """
                      update isTaken set [date] = ?, changeRoom = ?, changeSlot = ?
-                     where lecturerId = ? and [date] = ? and ((slotId = ? and changeSlot is null) or changeSlot = ?)
+                     where ((lecturerId = ? and changeLecturer is null) or changeLecturer = ?) and [date] = ? and ((slotId = ? and changeSlot is null) or changeSlot = ?)
                      """;
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -242,9 +243,10 @@ public class LecturerDBContext extends DBContext<Lecturer> {
             stm.setString(2, toRoomId);
             stm.setInt(3, toSlotId);
             stm.setString(4, lecturerId);
-            stm.setString(5, fromDate);
-            stm.setInt(6, fromSlotId);
+            stm.setString(5, lecturerId);
+            stm.setString(6, fromDate);
             stm.setInt(7, fromSlotId);
+            stm.setInt(8, fromSlotId);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
