@@ -310,7 +310,7 @@ public class StudentDBContext extends DBContext<Student> {
         IWeek iWeek = myDate.getWeek(week, year);
         ArrayList<Schedule> schedules = new ArrayList<>();
         String sql = """
-                     select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status]
+                     select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status], i.changeRoom, i.changeSlot
                      from Participate p 
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
                      join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId and l.subjectId = i.subjectId
@@ -331,11 +331,11 @@ public class StudentDBContext extends DBContext<Student> {
                 Schedule s = new Schedule();
                 s.setId(rs.getString("studentId"));
                 s.setSubjectId(rs.getString("subjectId"));
-                s.setRoomId(rs.getString("roomId"));
+                s.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
                 s.setGroupId(rs.getString("groupId"));
                 IDate d = new IDate(rs.getDate("date"));
                 s.setDate(d);
-                s.setSlotId(rs.getInt("slotId"));
+                s.setSlotId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setStatus(rs.getBoolean("status"));
                 schedules.add(s);
             }
@@ -348,7 +348,7 @@ public class StudentDBContext extends DBContext<Student> {
     public ArrayList<Schedule> getScheduleStudent(String studentId, String from, String to) {
         ArrayList<Schedule> schedules = new ArrayList<>();
         String sql = """
-                     select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status]
+                     select distinct p.studentId, p.subjectId, sche.roomId, l.groupId, sche.slotId, i.date, a.isPresent as [status], i.changeRoom, i.changeSlot
                      from Participate p 
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
                      join isTaken i on i.lecturerId = l.lecturerId and i.groupId = l.groupId and l.subjectId = i.subjectId
@@ -369,11 +369,11 @@ public class StudentDBContext extends DBContext<Student> {
                 Schedule s = new Schedule();
                 s.setId(rs.getString("studentId"));
                 s.setSubjectId(rs.getString("subjectId"));
-                s.setRoomId(rs.getString("roomId"));
+                s.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
                 s.setGroupId(rs.getString("groupId"));
                 IDate d = new IDate(rs.getDate("date"));
                 s.setDate(d);
-                s.setSlotId(rs.getInt("slotId"));
+                s.setSlotId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setStatus(rs.getBoolean("status"));
                 schedules.add(s);
             }
@@ -423,13 +423,13 @@ public class StudentDBContext extends DBContext<Student> {
     public ArrayList<Attendance> getAttendanceStudent(String studentId, String subjectId, String termId, int year) {
         ArrayList<Attendance> attendances = new ArrayList<>();
         String sql = """
-                     select p.studentId, sche.[weekday], i.[date], i.slotId, s.startTime, s.endTime, 
-                     sche.roomId, l.lecturerId, p.groupId, a.isPresent, a.[description], i.status as isTakenGroup
+                     select p.studentId, sche.[weekday], i.[date], i.slotId, s.startTime, s.endTime, i.changeLecturer,
+                     sche.roomId, l.lecturerId, p.groupId, a.isPresent, a.[description], i.status as isTakenGroup, i.changeRoom, i.changeSlot
                      from Participate p
                      join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
                      join isTaken i on i.groupId = l.groupId and i.lecturerId = l.lecturerId and l.subjectId = i.subjectId
                      join Schedule sche on sche.groupId = p.groupId and sche.subjectId = p.subjectId and sche.slotId = i.slotId
-                     join Slot s on s.id = i.slotId
+                     join Slot s on ((s.id = i.slotId and i.changeSlot is null) or i.changeSlot = s.id)
                      left join Attendance a on a.studentId = p.studentId and a.groupId = p.groupId
                      and a.subjectId = p.subjectId and a.slotId = i.slotId and a.[date] = i.[date]
                      where p.studentId = ? and p.subjectId = ? and sche.termId = ? and sche.year = ?
@@ -446,12 +446,12 @@ public class StudentDBContext extends DBContext<Student> {
                 Attendance a = new Attendance();
                 a.setDate(new IDate(rs.getDate("date")));
                 Slot s = new Slot();
-                s.setId(rs.getInt("slotId"));
+                s.setId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setStartTime(rs.getString("startTime"));
                 s.setEndTime(rs.getString("endTime"));
                 a.setSlot(s);
-                a.setRoomId(rs.getString("roomId"));
-                a.setLecturerId(rs.getString("lecturerId"));
+                a.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
+                a.setLecturerId(rs.getString("changeLecturer") == null ? rs.getString("lecturerId") : rs.getString("changeLecturer"));
                 a.setGroupId(rs.getString("groupId"));
                 a.setStatus(rs.getBoolean("isPresent"));
                 a.setDescription(rs.getString("description"));
@@ -521,11 +521,68 @@ public class StudentDBContext extends DBContext<Student> {
 
     }
 
+    public ArrayList<Integer> getSlotStudentFromClass(String groupId, String subjectId, String date) {
+        ArrayList<Integer> slots = new ArrayList();
+        String sql = """
+                     select id from Slot
+                     where id not in 
+                     (
+                     select distinct i.slotId from 
+                     (
+                     select * from Participate p 
+                     where p.groupId = ? and p.subjectId = ?
+                     ) a
+                     join Participate p on a.studentId = p.studentId
+                     join isTaken i on i.groupId = p.groupId and i.subjectId = p.subjectId
+                     join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+                     where i.[date] = ?
+                     )
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, groupId);
+            stm.setString(2, subjectId);
+            stm.setString(3, date);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                slots.add(rs.getInt("id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return slots;
+    }
+
+    public ArrayList<String> getRoomIdEmpty(String date, int slotId) {
+        String sql = """
+                     select id from Room
+                     where id not in
+                     (
+                     select s.roomId from isTaken i
+                     join Schedule s on s.groupId = i.groupId and s.subjectId = i.subjectId and i.slotId = s.slotId
+                     where i.[date] = ? and i.slotId = ?
+                     )
+                     """;
+        ArrayList<String> roomsId = new ArrayList<>();
+        
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, date);
+            stm.setInt(2, slotId);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                roomsId.add(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roomsId;
+    }
+
     public static void main(String[] args) {
         StudentDBContext stuDB = new StudentDBContext();
-        ArrayList<Schedule> s = stuDB.getScheduleStudent("HE172387", "2024-02-02", "2024-03-01");
-        for (Schedule a : s) {
-            System.out.println(a.getSubjectId());
-        }
+        ArrayList<String> s = stuDB.getRoomIdEmpty("2024-03-19", 2);
+        System.out.println(s.size());
     }
 }

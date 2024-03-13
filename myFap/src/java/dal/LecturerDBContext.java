@@ -88,7 +88,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
         IWeek iWeek = myDate.getWeek(week, year);
         ArrayList<Schedule> schedules = new ArrayList<>();
         String sql = """
-                     select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer
+                     select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer, i.changeRoom, i.changeSlot
                      from isTaken i
                      join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId and i.subjectId = l.subjectId
                      join Schedule s on s.groupId = l.groupId and s.subjectId = l.subjectId and i.slotId = s.slotId
@@ -112,11 +112,11 @@ public class LecturerDBContext extends DBContext<Lecturer> {
                     s.setId(rs.getString("changeLecturer"));
                 }
                 s.setSubjectId(rs.getString("subjectId"));
-                s.setRoomId(rs.getString("roomId"));
+                s.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
                 s.setGroupId(rs.getString("groupId"));
                 IDate d = new IDate(rs.getDate("date"));
                 s.setDate(d);
-                s.setSlotId(rs.getInt("slotId"));
+                s.setSlotId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setStatus(rs.getBoolean("status"));
                 schedules.add(s);
             }
@@ -129,7 +129,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
     public ArrayList<Schedule> getScheduleLecturer(String lecturerId, String fromDate, String toDate) {
         ArrayList<Schedule> schedules = new ArrayList<>();
         String sql = """
-                     select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer
+                     select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer, i.changeRoom, i.changeSlot
                      from isTaken i
                      join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId and i.subjectId = l.subjectId
                      join Schedule s on s.groupId = l.groupId and s.subjectId = l.subjectId and i.slotId = s.slotId
@@ -153,11 +153,11 @@ public class LecturerDBContext extends DBContext<Lecturer> {
                     s.setId(rs.getString("changeLecturer"));
                 }
                 s.setSubjectId(rs.getString("subjectId"));
-                s.setRoomId(rs.getString("roomId"));
+                s.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
                 s.setGroupId(rs.getString("groupId"));
                 IDate d = new IDate(rs.getDate("date"));
                 s.setDate(d);
-                s.setSlotId(rs.getInt("slotId"));
+                s.setSlotId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setStatus(rs.getBoolean("status"));
                 schedules.add(s);
             }
@@ -170,7 +170,7 @@ public class LecturerDBContext extends DBContext<Lecturer> {
     public ArrayList<Schedule> getScheduleByDate(String id, String date) {
         ArrayList<Schedule> schedules = new ArrayList<>();
         String sql = """
-                     select distinct i.lecturerId, i.groupId, l.subjectId, i.slotId, i.date, i.changeLecturer, s.name, sche.roomId, i.status
+                     select distinct i.lecturerId, i.groupId, l.subjectId, i.slotId, i.date, i.changeLecturer, s.name, sche.roomId, i.status, i.changeRoom, i.changeSlot
                      from isTaken i
                      join Lession l on l.groupId = i.groupId and l.lecturerId = i.lecturerId and i.subjectId = l.subjectId
                      join Schedule sche on sche.groupId = i.groupId and sche.subjectId = l.subjectId and i.slotId = sche.slotId
@@ -193,11 +193,11 @@ public class LecturerDBContext extends DBContext<Lecturer> {
                 } else {
                     s.setId(rs.getString("changeLecturer"));
                 }
-                s.setSlotId(rs.getInt("slotId"));
+                s.setSlotId(rs.getInt("changeSlot")==0?rs.getInt("slotId"):rs.getInt("changeSlot"));
                 s.setSubjectId(rs.getString("subjectId"));
                 s.setSubjectName(rs.getString("name"));
                 s.setGroupId(rs.getString("groupId"));
-                s.setRoomId(rs.getString("roomId"));
+                s.setRoomId(rs.getString("changeRoom")==null?rs.getString("roomId"):rs.getString("changeRoom"));
                 s.setStatus(rs.getBoolean("status"));
                 Date d = rs.getDate("date");
                 IDate d2 = new IDate(d);
@@ -230,13 +230,32 @@ public class LecturerDBContext extends DBContext<Lecturer> {
         }
 
     }
+    
+    public void changeSession(String lecturerId, String fromDate, int fromSlotId, String toDate, int toSlotId, String toRoomId){
+        String sql = """
+                     update isTaken set [date] = ?, changeRoom = ?, changeSlot = ?
+                     where lecturerId = ? and [date] = ? and ((slotId = ? and changeSlot is null) or changeSlot = ?)
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, toDate);
+            stm.setString(2, toRoomId);
+            stm.setInt(3, toSlotId);
+            stm.setString(4, lecturerId);
+            stm.setString(5, fromDate);
+            stm.setInt(6, fromSlotId);
+            stm.setInt(7, fromSlotId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 
     public static void main(String[] args) {
         LecturerDBContext lecDB = new LecturerDBContext();
-        ArrayList<Schedule> schedules = lecDB.getScheduleByDate("SonNT5", "2024-03-01");
-        for (Schedule s : schedules) {
-            System.out.println(s.getDate() + " " + s.getSlotId() + " " + s.isStatus());
-        }
+        ArrayList<Schedule> schedules = lecDB.getScheduleLecturer("SonNT5", 10, 2024);
+        
     }
 
 }

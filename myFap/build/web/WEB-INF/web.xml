@@ -100,6 +100,10 @@
         <servlet-name>TableDateScheduleStudentAjax</servlet-name>
         <servlet-class>ajax.student.TableDateScheduleStudentAjax</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeSessionLecturer</servlet-name>
+        <servlet-class>controller.lecturer.ChangeSessionLecturer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home/login</url-pattern>
@@ -199,6 +203,10 @@
     <servlet-mapping>
         <servlet-name>TableDateScheduleStudentAjax</servlet-name>
         <url-pattern>/ajax/student/schedule/table/date</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeSessionLecturer</servlet-name>
+        <url-pattern>/lecturer/changeSession</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>

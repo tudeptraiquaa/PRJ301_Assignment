@@ -241,6 +241,9 @@
                                                                             <a href="../lecturer/change?id=${id}&groupId=${sche.groupId}&subjectId=${sche.subjectId}&date=${sche.date}&slotId=${sche.slotId}&roomId=${sche.roomId}">
                                                                                 <p> (Change Lecturer) </p>
                                                                             </a>
+                                                                            <a href="../lecturer/changeSession?lecturerId=${id}&groupId=${sche.groupId}&subjectId=${sche.subjectId}&fromDate=${sche.date}&fromSlotId=${sche.slotId}&fromRoomId=${sche.roomId}">
+                                                                                <p> (Change Session) </p>
+                                                                            </a>
                                                                         </c:if>
                                                                     </c:if>
 
@@ -403,7 +406,7 @@
                 </c:if> 
             </div>
         </c:if>
-        
+
         <c:if test="${error eq null}">
             <div class="note">
                 <b>More note / Chú thích thêm</b>

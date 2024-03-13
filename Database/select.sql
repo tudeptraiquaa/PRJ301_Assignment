@@ -278,4 +278,56 @@ join Term t on t.id = s.termId
 where p.studentId = 'HE170240' and s.termId = 'SU'
 and p.subjectId != 'ACC101' and s.slotId = 4 and s.[weekday] = 5
 
-select * from ChangeGroup
+
+
+select p.studentId from isTaken i
+join Participate p on p.groupId = i.groupId and p.subjectId = i.subjectId
+where ((i.lecturerId = 'SonNT5' and i.changeLecturer is null) or i.changeLecturer = 'SonNT5')
+and i.[date] = '2024-03-15'
+-- chon slot trong
+select id from Slot
+where id not in 
+(
+select distinct i.slotId, p.studentId, p.subjectId from 
+(
+select * from Participate p 
+where p.groupId = 'SE1817' and p.subjectId = 'PRJ301'
+) a
+join Participate p on a.studentId = p.studentId
+join isTaken i on i.groupId = p.groupId and i.subjectId = p.subjectId
+join Schedule s on s.groupId = p.groupId and s.subjectId = p.subjectId
+where i.[date] = '2024-03-21'
+)
+-- chon phong trong
+select id from Room
+where id not in
+(
+select s.roomId from isTaken i
+join Schedule s on s.groupId = i.groupId and s.subjectId = i.subjectId and i.slotId = s.slotId
+where i.[date] = '2024-03-19' and i.slotId = 2
+)
+
+--
+select * from isTaken
+where date = '2024-03-17'
+
+select distinct l.lecturerId, l.subjectId, s.roomId, l.groupId, s.slotId, i.date, i.status, i.changeLecturer, i.changeRoom, i.changeSlot
+                     from isTaken i
+                     join Lession l on i.lecturerId = l.lecturerId and i.groupId = l.groupId and i.subjectId = l.subjectId
+                     join Schedule s on s.groupId = l.groupId and s.subjectId = l.subjectId and i.slotId = s.slotId
+                     where ((i.lecturerId = 'Sonnt5' and i.changeLecturer is null) or i.changeLecturer = 'Sonnt5') 
+                     and i.[date] >= '2024-03-11' and [date] <= '2024-03-17'
+                     order by i.[date]
+
+select p.studentId, sche.[weekday], i.[date], i.slotId, s.startTime, s.endTime, i.changeLecturer,
+                     sche.roomId, l.lecturerId, p.groupId, a.isPresent, a.[description], i.status as isTakenGroup, i.changeRoom, i.changeSlot
+                     from Participate p
+                     join Lession l on p.groupId = l.groupId and p.subjectId = l.subjectId
+                     join isTaken i on i.groupId = l.groupId and i.lecturerId = l.lecturerId and l.subjectId = i.subjectId
+                     join Schedule sche on sche.groupId = p.groupId and sche.subjectId = p.subjectId and sche.slotId = i.slotId
+                     join Slot s on ((s.id = i.slotId and i.changeSlot is null) or i.changeSlot = s.id)
+                     left join Attendance a on a.studentId = p.studentId and a.groupId = p.groupId
+                     and a.subjectId = p.subjectId and a.slotId = i.slotId and a.[date] = i.[date]
+                     where p.studentId = 'HE172387' and p.subjectId = 'PRJ301' and sche.termId = 'SP' and sche.year = 2024
+                     order by i.date
+
