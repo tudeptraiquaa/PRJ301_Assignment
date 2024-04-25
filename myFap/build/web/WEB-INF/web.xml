@@ -104,6 +104,22 @@
         <servlet-name>ChangeSessionLecturer</servlet-name>
         <servlet-class>controller.lecturer.ChangeSessionLecturer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddScheduleGroup</servlet-name>
+        <servlet-class>controller.group.AddScheduleGroup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteScheduleGroup</servlet-name>
+        <servlet-class>controller.group.DeleteScheduleGroup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeLecturerGroup</servlet-name>
+        <servlet-class>controller.group.ChangeLecturerGroup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteStudentGroup</servlet-name>
+        <servlet-class>controller.group.DeleteStudentGroup</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/home/login</url-pattern>
@@ -207,6 +223,22 @@
     <servlet-mapping>
         <servlet-name>ChangeSessionLecturer</servlet-name>
         <url-pattern>/lecturer/changeSession</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddScheduleGroup</servlet-name>
+        <url-pattern>/group/addSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteScheduleGroup</servlet-name>
+        <url-pattern>/group/deleteSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeLecturerGroup</servlet-name>
+        <url-pattern>/group/changeLecturer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteStudentGroup</servlet-name>
+        <url-pattern>/group/deleteStudent</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>

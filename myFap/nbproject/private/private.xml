@@ -3,13 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/dal/StudentDBContext.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/ScheduleStudent.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/dal/LecturerDBContext.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/lecturer/TakenGroup.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/student/AttendanceStudent.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/controller/lecturer/ChangeSessionLecturer.java</file>
-            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/view/lecturer/changeSession.jsp</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/src/java/dal/DBContext.java</file>
+            <file>file:/D:/Syllabus/2024_Spring/PRJ/PRJ301_Assignment/myFap/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>

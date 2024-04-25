@@ -331,3 +331,12 @@ select p.studentId, sche.[weekday], i.[date], i.slotId, s.startTime, s.endTime, 
                      where p.studentId = 'HE172387' and p.subjectId = 'PRJ301' and sche.termId = 'SP' and sche.year = 2024
                      order by i.date
 
+select id, monthBegin from Term
+where monthBegin > ?
+order by monthBegin
+
+
+--
+select * from ViewNumber
+
+

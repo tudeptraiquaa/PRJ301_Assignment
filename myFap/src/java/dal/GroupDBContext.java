@@ -6,6 +6,7 @@ package dal;
 
 import entity.Attendance;
 import entity.Calendar;
+import entity.IDate;
 import entity.IEntity;
 import entity.RequireChangeGroup;
 import entity.Term;
@@ -19,6 +20,46 @@ import java.util.logging.Logger;
  * @author tu
  */
 public class GroupDBContext extends DBContext<IEntity> {
+
+    public ArrayList<String> getListGroup() {
+        ArrayList<String> groupsId = new ArrayList<>();
+        String sql = """
+                     select id from [Group]
+                     order by id
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                groupsId.add(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return groupsId;
+    }
+
+    public ArrayList<String> getSubjectGroupNotYet(String groupId) {
+        ArrayList<String> subjectsId = new ArrayList<>();
+        String sql = """
+                     select id, semester from [Subject]
+                     where id not in
+                     (select distinct subjectId from Schedule s
+                     where s.groupId = ?)
+                     order by semester
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, groupId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                subjectsId.add(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return subjectsId;
+    }
 
     public ArrayList<Attendance> viewAttendanceGroup(String groupId, String subjectId, String date, int slotId) {
         ArrayList<Attendance> attendances = new ArrayList<>();
@@ -152,6 +193,72 @@ public class GroupDBContext extends DBContext<IEntity> {
 
         return terms;
     }
+
+    public ArrayList<String> getTermGroup(int year) {
+        ArrayList<String> termsId = new ArrayList<>();
+        IDate now = new IDate();
+        String sql = """
+                     """;
+        if (Integer.parseInt(now.getYear())==year) {
+            sql = """
+                  select id, monthBegin from Term
+                  where monthBegin > ?
+                  order by monthBegin
+                  """;
+            try {
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setInt(1, Integer.parseInt(now.getMonth()));
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    termsId.add(rs.getString("id"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            sql = """
+                  select id, monthBegin from Term
+                  order by monthBegin
+                  """;
+            try {
+                PreparedStatement stm = connection.prepareStatement(sql);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    termsId.add(rs.getString("id"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return termsId;
+    }
+    
+    public ArrayList<Integer> getSLotsIdNotYetByWeekDay(String groupId, int weekday, String termId, int year){
+        ArrayList<Integer> slotsId = new ArrayList<>();
+        String sql = """
+                     select id from Slot
+                     where id not in
+                     (select s.slotId from Schedule s
+                     where s.groupId = ? and s.termId = ? and s.[year] = ? and s.[weekday] = ?)
+                     """;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, groupId);
+            stm.setString(2, termId);
+            stm.setInt(3, year);
+            stm.setInt(4, weekday);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                slotsId.add(rs.getInt("id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        return slotsId;
+    }
+   
 
     public ArrayList<String> getGroupByTerm(String termId, int year) {
         ArrayList<String> groupsId = new ArrayList<>();
@@ -758,7 +865,7 @@ public class GroupDBContext extends DBContext<IEntity> {
                             break;
                         }
                     } catch (SQLException ex) {
-                        flag=false;
+                        flag = false;
                         Logger.getLogger(GroupDBContext.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     }

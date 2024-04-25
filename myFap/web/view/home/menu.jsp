@@ -12,6 +12,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Menu</title>
         <link rel="stylesheet" href="../css/style.css">
+        <style>
+            .item{
+                width: 45%;
+            }
+            .item h3{
+                width: 100%;
+            }
+        </style>
     </head>
     <body>
         <div class="header">
@@ -165,7 +173,7 @@
             <div class="body">
                 <h2>Academic Information</h2>
                 <div class="body_items">
-                    <div class="lecturer">
+                    <div class="item">
                         <h3>
                             Information Lecturer(Thông tin giảng viên)
                         </h3>
@@ -182,7 +190,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="student">
+                    <div class="item">
                         <h3>Inormation Student(Thông tin sinh viên)</h3>
                         <ul>
                             <li>
@@ -202,6 +210,38 @@
                         </ul>
                     </div>
                 </div>
+<!--                <div class="body_items">
+                    <div class="item">
+                        <h3>
+                            Thêm
+                        </h3>
+                        <div>
+                            <ul>
+                                <li>
+                                    <a href="../group/addSchedule">Thêm lớp học</a>
+                                </li>
+                                <li>
+                                    <a href="../group/changeLecturer">Đổi giáo viên</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <h3>
+                            Xóa
+                        </h3>
+                        <div>
+                            <ul>
+                                <li>
+                                    <a href="../group/deleteSchedule">Xóa lớp học</a>
+                                </li>
+                                <li>
+                                    <a href="../group/deleteStudent">Xóa học sinh</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>-->
             </div>
         </c:if>
         <div class="footer">
